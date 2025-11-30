@@ -8,6 +8,7 @@ import { productsAPI, salesAPI } from '@/services/mockDataService';
 import { Product, SaleItem, SaleInvoice } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { Receipt } from '@/components/Receipt';
+import { useTranslation } from 'react-i18next';
 
 export default function Sales() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -16,6 +17,7 @@ export default function Sales() {
   const [customerName, setCustomerName] = useState('');
   const [lastSale, setLastSale] = useState<SaleInvoice | null>(null);
   const { toast } = useToast();
+  const { t } = useTranslation();
   const receiptRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -38,7 +40,7 @@ export default function Sales() {
     if (existing) {
       if (existing.quantity >= product.stock) {
         toast({
-          title: 'Insufficient stock',
+          title: t('sales.insufficientStock'),
           description: `Only ${product.stock} units available`,
           variant: 'destructive',
         });
@@ -65,13 +67,12 @@ export default function Sales() {
       return;
     }
 
-    // Check stock limit
     const item = cart.find(i => i.id === itemId);
     if (item) {
       const product = products.find(p => p.id === item.productId);
       if (product && newQuantity > product.stock) {
         toast({
-          title: 'Insufficient stock',
+          title: t('sales.insufficientStock'),
           description: `Only ${product.stock} units available`,
           variant: 'destructive',
         });
@@ -121,7 +122,7 @@ export default function Sales() {
   const completeSale = async () => {
     if (cart.length === 0) {
       toast({
-        title: 'Cart is empty',
+        title: t('sales.emptyCart'),
         description: 'Add items to cart before completing sale',
         variant: 'destructive',
       });
@@ -143,7 +144,6 @@ export default function Sales() {
 
       setLastSale(newSale);
       
-      // Update local product state to reflect stock changes immediately
       setProducts(products.map(p => {
         const cartItem = cart.find(c => c.productId === p.id);
         if (cartItem) {
@@ -153,14 +153,11 @@ export default function Sales() {
       }));
 
       toast({
-        title: 'Sale completed!',
+        title: t('sales.success'),
         description: `Invoice ${newSale.invoiceNumber} created`,
       });
 
       clearCart();
-      
-      // Optional: Auto print or ask to print
-      // setTimeout(handlePrint, 500); 
     } catch (error) {
       console.error(error);
       toast({
@@ -176,24 +173,23 @@ export default function Sales() {
       <div className="space-y-6 print:hidden">
         <div className="flex justify-between items-start">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Point of Sale</h1>
-            <p className="text-muted-foreground mt-1">Process sales and manage transactions</p>
+            <h1 className="text-3xl font-bold text-foreground">{t('sales.title')}</h1>
+            <p className="text-muted-foreground mt-1">{t('sales.subtitle')}</p>
           </div>
           {lastSale && (
             <Button variant="outline" onClick={handlePrint}>
               <Printer className="mr-2 h-4 w-4" />
-              Print Last Receipt
+              {t('sales.printReceipt')}
             </Button>
           )}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Products Section */}
           <div className="lg:col-span-2 space-y-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search products..."
+                placeholder={t('sales.search')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
@@ -228,18 +224,17 @@ export default function Sales() {
             </div>
           </div>
 
-          {/* Cart Section */}
           <div className="space-y-4">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <ShoppingCart className="h-5 w-5" />
-                  Current Cart
+                  {t('sales.cart')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <Input
-                  placeholder="Customer name (optional)"
+                  placeholder={t('sales.customerName')}
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
                 />
@@ -301,24 +296,24 @@ export default function Sales() {
                 </div>
 
                 {cart.length === 0 && (
-                  <p className="text-center text-muted-foreground py-8">Cart is empty</p>
+                  <p className="text-center text-muted-foreground py-8">{t('sales.emptyCart')}</p>
                 )}
 
                 <div className="space-y-2 pt-4 border-t border-border">
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Subtotal:</span>
+                    <span className="text-muted-foreground">{t('sales.subtotal')}:</span>
                     <span>${subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Discount:</span>
+                    <span className="text-muted-foreground">{t('sales.discount')}:</span>
                     <span className="text-destructive">-${totalDiscount.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Tax (10%):</span>
+                    <span className="text-muted-foreground">{t('sales.tax')} (10%):</span>
                     <span>${tax.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-lg font-bold pt-2 border-t border-border">
-                    <span>Total:</span>
+                    <span>{t('sales.total')}:</span>
                     <span className="text-primary">${total.toFixed(2)}</span>
                   </div>
                 </div>
@@ -330,7 +325,7 @@ export default function Sales() {
                     onClick={completeSale}
                     disabled={cart.length === 0}
                   >
-                    Complete Sale
+                    {t('sales.complete')}
                   </Button>
                   <Button 
                     variant="outline" 
@@ -338,7 +333,7 @@ export default function Sales() {
                     onClick={clearCart}
                     disabled={cart.length === 0}
                   >
-                    Clear Cart
+                    {t('sales.clear')}
                   </Button>
                 </div>
               </CardContent>
@@ -347,7 +342,6 @@ export default function Sales() {
         </div>
       </div>
       
-      {/* Hidden Receipt Component */}
       {lastSale && <Receipt ref={receiptRef} invoice={lastSale} />}
     </>
   );

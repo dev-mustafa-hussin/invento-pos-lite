@@ -1,0 +1,65 @@
+{
+  "app": {
+    "title": "Invento POS",
+    "dashboard": "Dashboard",
+    "products": "Products",
+    "sales": "Sales",
+    "invoices": "Invoices",
+    "reports": "Reports",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Overview of your store's performance",
+    "todaySales": "Today's Sales",
+    "totalInvoices": "Invoices",
+    "lowStock": "Low Stock Items",
+    "revenueTrend": "Revenue Trend",
+    "lowStockProducts": "Low Stock Products",
+    "recentSales": "Recent Sales",
+    "allStocked": "All products are well stocked!",
+    "noSales": "No sales today yet"
+  },
+  "products": {
+    "title": "Products",
+    "subtitle": "Manage your inventory",
+    "add": "Add Product",
+    "search": "Search products...",
+    "name": "Product Name",
+    "sku": "SKU",
+    "category": "Category",
+    "price": "Price",
+    "stock": "Stock",
+    "status": "Status",
+    "actions": "Actions",
+    "active": "Active",
+    "inactive": "Inactive",
+    "deleteConfirm": "Are you sure you want to delete {{name}}?",
+    "deleteSuccess": "Product deleted successfully",
+    "saveSuccess": "Product saved successfully"
+  },
+  "sales": {
+    "title": "Point of Sale",
+    "subtitle": "Process sales and manage transactions",
+    "search": "Search products...",
+    "cart": "Current Cart",
+    "customerName": "Customer name (optional)",
+    "emptyCart": "Cart is empty",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "tax": "Tax",
+    "total": "Total",
+    "complete": "Complete Sale",
+    "clear": "Clear Cart",
+    "printReceipt": "Print Last Receipt",
+    "success": "Sale completed!",
+    "insufficientStock": "Insufficient stock"
+  },
+  "user": {
+    "profile": "Profile",
+    "login": "Login",
+    "register": "Register",
+    "forgotPassword": "Forgot Password"
+  }
+}
