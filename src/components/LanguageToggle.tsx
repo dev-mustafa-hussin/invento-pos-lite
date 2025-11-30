@@ -25,15 +25,16 @@ export function LanguageToggle() {
       onClick={toggleLanguage}
       className="h-10 px-3 font-semibold"
     >
+      {/* Show CURRENT language, not the next one */}
       {currentLang === 'ar' ? (
-        <span className="flex items-center gap-2">
-          <span className="text-lg">🇺🇸</span>
-          <span>EN</span>
-        </span>
-      ) : (
         <span className="flex items-center gap-2">
           <span className="text-lg">🇸🇦</span>
           <span>AR</span>
+        </span>
+      ) : (
+        <span className="flex items-center gap-2">
+          <span className="text-lg">🇺🇸</span>
+          <span>EN</span>
         </span>
       )}
     </Button>

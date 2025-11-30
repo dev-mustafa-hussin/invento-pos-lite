@@ -1,79 +1,71 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { ReactNode } from 'react';
 
-interface Column<T> {
+export interface Column<T = any> {
   header: string;
-  accessor: keyof T | ((row: T) => React.ReactNode);
-  cell?: (row: T) => React.ReactNode;
+  accessor: ((row: T, index?: number) => ReactNode) | keyof T;
+  className?: string;
 }
 
 interface DataTableProps<T> {
   data: T[];
   columns: Column<T>[];
-  onRowClick?: (row: T) => void;
 }
 
-export function DataTable<T extends { id: string }>({ 
+export function DataTable<T extends { id?: string | number }>({ 
   data, 
-  columns, 
-  onRowClick 
+  columns 
 }: DataTableProps<T>) {
+  const getValue = (row: T, column: Column<T>, index: number) => {
+    if (typeof column.accessor === 'function') {
+      return column.accessor(row, index);
+    }
+    return row[column.accessor as keyof T] as React.ReactNode;
+  };
+
   return (
-    <div className="rounded-lg border border-border overflow-hidden">
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-muted hover:bg-muted">
-            {columns.map((column, index) => (
-              <TableHead key={index} className="font-semibold">
+    <div className="w-full">
+      <table className="w-full border-collapse">
+        <thead>
+          <tr className="border-b border-border bg-muted/50">
+            {columns.map((column, idx) => (
+              <th
+                key={idx}
+                className={`
+                  px-3 md:px-4 py-2 md:py-3 text-left text-xs md:text-sm font-medium text-muted-foreground
+                  ${column.className || ''}
+                `}
+              >
                 {column.header}
-              </TableHead>
+              </th>
             ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.length === 0 ? (
-            <TableRow>
-              <TableCell 
-                colSpan={columns.length} 
-                className="h-24 text-center text-muted-foreground"
-              >
-                No data available
-              </TableCell>
-            </TableRow>
-          ) : (
-            data.map((row) => (
-              <TableRow
-                key={row.id}
-                onClick={() => onRowClick?.(row)}
-                className={onRowClick ? 'cursor-pointer hover:bg-muted/50' : ''}
-              >
-                {columns.map((column, colIndex) => {
-                  let content;
-                  if (column.cell) {
-                    content = column.cell(row);
-                  } else if (typeof column.accessor === 'function') {
-                    content = column.accessor(row);
-                  } else {
-                    content = row[column.accessor] as React.ReactNode;
-                  }
-                  
-                  return (
-                    <TableCell key={colIndex}>
-                      {content}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row, rowIndex) => (
+            <tr
+              key={row.id || rowIndex}
+              className="border-b border-border hover:bg-muted/30 transition-colors"
+            >
+              {columns.map((column, colIndex) => (
+                <td
+                  key={colIndex}
+                  className={`
+                    px-3 md:px-4 py-2 md:py-3 text-xs md:text-sm text-foreground
+                    ${column.className || ''}
+                  `}
+                >
+                  {getValue(row, column, rowIndex)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {data.length === 0 && (
+        <div className="text-center py-8 text-sm md:text-base text-muted-foreground">
+          No data available
+        </div>
+      )}
     </div>
   );
 }

@@ -8,8 +8,7 @@ import { productsAPI } from '@/services/mockDataService';
 import { Product } from '@/types';
 import { ProductFormDialog } from '@/components/ProductFormDialog';
 import { useToast } from '@/hooks/use-toast';
-
-// TODO: Replace mockDataService with real API client when ASP.NET Core backend available
+import { useTranslation } from 'react-i18next';
 
 export default function Products() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -19,6 +18,7 @@ export default function Products() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   useEffect(() => {
     loadProducts();
@@ -61,7 +61,7 @@ export default function Products() {
       await productsAPI.delete(product.id);
       toast({
         title: 'Success',
-        description: 'Product deleted successfully',
+        description: t('products.deleteSuccess'),
       });
       loadProducts();
     } catch (error) {
@@ -89,15 +89,15 @@ export default function Products() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Products</h1>
-          <p className="text-muted-foreground mt-1">Manage your inventory</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t('products.title')}</h1>
+          <p className="text-sm md:text-base text-muted-foreground mt-1">{t('products.subtitle')}</p>
         </div>
-        <Button onClick={() => setIsFormOpen(true)}>
+        <Button onClick={() => setIsFormOpen(true)} className="w-full sm:w-auto">
           <Plus className="h-4 w-4 mr-2" />
-          Add Product
+          {t('products.add')}
         </Button>
       </div>
 
@@ -105,7 +105,7 @@ export default function Products() {
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search products..."
+            placeholder={t('products.search')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -113,55 +113,88 @@ export default function Products() {
         </div>
       </div>
 
-      <DataTable
-        data={filteredProducts}
-        columns={[
-          { header: 'Product Name', accessor: 'name' },
-          { header: 'SKU', accessor: 'sku' },
-          { header: 'Category', accessor: 'category' },
-          { 
-            header: 'Price', 
-            accessor: (row) => `$${row.unitPrice.toFixed(2)}`
-          },
-          { 
-            header: 'Stock', 
-            accessor: (row) => (
-              <Badge variant={row.stock <= row.minimumStock ? 'destructive' : 'default'}>
-                {row.stock} units
-              </Badge>
-            )
-          },
-          { 
-            header: 'Status', 
-            accessor: (row) => (
-              <Badge variant={row.status === 'active' ? 'default' : 'secondary'}>
-                {row.status === 'active' ? 'Active' : 'Inactive'}
-              </Badge>
-            )
-          },
-          { 
-            header: 'Actions', 
-            accessor: (row) => (
-              <div className="flex gap-2">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => handleEdit(row)}
-                >
-                  <Edit className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => handleDelete(row)}
-                >
-                  <Trash2 className="h-4 w-4 text-destructive" />
-                </Button>
-              </div>
-            )
-          },
-        ]}
-      />
+      <div className="overflow-x-auto -mx-4 sm:mx-0">
+        <div className="inline-block min-w-full align-middle">
+          <DataTable
+            data={filteredProducts}
+            columns={[
+              { 
+                header: t('products.name'), 
+                accessor: (row) => (
+                  <div className="min-w-[120px]">
+                    <p className="font-medium text-sm md:text-base">{row.name}</p>
+                    <p className="text-xs text-muted-foreground md:hidden">{row.sku}</p>
+                  </div>
+                )
+              },
+              { 
+                header: t('products.sku'), 
+                accessor: 'sku',
+                className: 'hidden md:table-cell'
+              },
+              { 
+                header: t('products.category'), 
+                accessor: 'category',
+                className: 'hidden lg:table-cell'
+              },
+              { 
+                header: t('products.price'), 
+                accessor: (row) => (
+                  <span className="text-sm md:text-base font-semibold">
+                    ${row.unitPrice.toFixed(2)}
+                  </span>
+                )
+              },
+              { 
+                header: t('products.stock'), 
+                accessor: (row) => (
+                  <Badge 
+                    variant={row.stock <= row.minimumStock ? 'destructive' : 'default'}
+                    className="text-xs"
+                  >
+                    {row.stock}
+                  </Badge>
+                )
+              },
+              { 
+                header: t('products.status'), 
+                accessor: (row) => (
+                  <Badge 
+                    variant={row.status === 'active' ? 'default' : 'secondary'}
+                    className="text-xs hidden sm:inline-flex"
+                  >
+                    {row.status === 'active' ? t('products.active') : t('products.inactive')}
+                  </Badge>
+                ),
+                className: 'hidden sm:table-cell'
+              },
+              { 
+                header: t('products.actions'), 
+                accessor: (row) => (
+                  <div className="flex gap-1 md:gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={() => handleEdit(row)}
+                    >
+                      <Edit className="h-3 w-3 md:h-4 md:w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={() => handleDelete(row)}
+                    >
+                      <Trash2 className="h-3 w-3 md:h-4 md:w-4 text-destructive" />
+                    </Button>
+                  </div>
+                )
+              },
+            ]}
+          />
+        </div>
+      </div>
 
       <ProductFormDialog
         open={isFormOpen}
