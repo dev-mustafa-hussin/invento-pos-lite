@@ -1,167 +1,460 @@
-# ShopFlow POS - Point of Sale & Inventory Management
+<div align="center">
 
-A modern, responsive web application for managing products, sales, and inventory for retail stores.
+# 🏪 Invento POS - نظام نقاط البيع الاحترافي
 
-## Features
+### Point of Sale & Inventory Management System
 
-- **Dashboard**: Real-time overview of sales metrics, low-stock alerts, and recent transactions
-- **Product Management**: Complete CRUD operations for products with search and filtering
-- **Point of Sale**: Interactive sales interface with cart management and discount support
-- **Invoice History**: View and search all sales transactions
-- **Daily Reports**: Analytics with top-selling products and export functionality
-- **Settings**: Configure store information and system preferences
+### نظام متكامل لإدارة المبيعات والمخزون
 
-## Tech Stack
+[![React](https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+[![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=for-the-badge&logo=vite)](https://vitejs.dev/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
 
-- **React 18** with TypeScript
-- **Tailwind CSS** for styling
-- **Shadcn UI** for components
-- **React Router** for navigation
-- **Lucide React** for icons
-- **Vite** for build tooling
+<p align="center">
+  <img src="./docs/screenshots/dashboard-preview.png" alt="Invento POS Dashboard" width="800"/>
+</p>
 
-## Project Structure
+**[English](#english)** | **[العربية](#arabic)**
 
-```
-src/
-├── components/          # Reusable UI components
-│   ├── ui/             # Shadcn UI components
-│   ├── DataTable.tsx   # Generic data table component
-│   ├── StatCard.tsx    # Dashboard statistics card
-│   ├── Sidebar.tsx     # Navigation sidebar
-│   ├── TopBar.tsx      # Top navigation bar
-│   └── ProductFormDialog.tsx  # Product create/edit form
-├── layouts/
-│   └── AppLayout.tsx   # Main application layout
-├── pages/              # Page components
-│   ├── Dashboard.tsx   # Dashboard overview
-│   ├── Products.tsx    # Product management
-│   ├── Sales.tsx       # POS interface
-│   ├── Invoices.tsx    # Sales history
-│   ├── Reports.tsx     # Analytics and reports
-│   └── Settings.tsx    # Application settings
-├── services/
-│   └── mockDataService.ts  # Mock API layer (TODO: Replace with real API)
-├── types/
-│   └── index.ts        # TypeScript interfaces
-└── App.tsx             # Main application component
-```
+</div>
 
-## Getting Started
+---
+
+<a name="english"></a>
+
+## 🌟 Features
+
+### ✨ Core Functionalities
+
+- 📊 **Real-time Dashboard** - Live analytics and KPIs
+- 🛒 **Point of Sale** - Fast and intuitive sales interface
+- 📦 **Inventory Management** - Track stock levels and products
+- 🧾 **Invoice Management** - Generate and print receipts
+- 📈 **Reports & Analytics** - Daily sales reports and insights
+- 👥 **Multi-user Support** - Role-based access control (planned)
+
+### 🎨 User Experience
+
+- 🌐 **Bilingual Support** - Full Arabic/English with RTL/LTR
+- 🌓 **Dark/Light Mode** - Eye-friendly themes
+- 📱 **Fully Responsive** - Works on all devices (Mobile, Tablet, Desktop)
+- ⚡ **Smooth Animations** - Framer Motion powered transitions
+- 🎯 **Intuitive UI** - Clean and modern interface
+- ♿ **Accessible** - WCAG compliant design
+
+### 🔐 Authentication (In Progress)
+
+- 🔑 Login/Register pages
+- 🔒 Password recovery
+- 👤 User profiles
+- 🛡️ Protected routes
+
+### 💾 Data Management
+
+- 💿 **Local Storage** - Offline data persistence
+- 🔄 **Real-time Updates** - Instant UI updates
+- 📥 **Export/Import** - Backup and restore data
+- 🖨️ **Print Receipts** - Professional invoice printing
+
+---
+
+## 📸 Screenshots
+
+<details>
+<summary>Click to view screenshots</summary>
+
+### Dashboard
+
+<img src="./docs/screenshots/dashboard-ar.png" alt="Dashboard Arabic" width="400"/> <img src="./docs/screenshots/dashboard-en.png" alt="Dashboard English" width="400"/>
+
+### Point of Sale
+
+<img src="./docs/screenshots/sales-mobile.png" alt="Sales Mobile" width="250"/> <img src="./docs/screenshots/sales-desktop.png" alt="Sales Desktop" width="550"/>
+
+### Dark Mode
+
+<img src="./docs/screenshots/dark-mode.png" alt="Dark Mode" width="400"/> <img src="./docs/screenshots/light-mode.png" alt="Light Mode" width="400"/>
+
+### Authentication
+
+<img src="./docs/screenshots/login.png" alt="Login" width="250"/> <img src="./docs/screenshots/register.png" alt="Register" width="250"/> <img src="./docs/screenshots/profile.png" alt="Profile" width="250"/>
+
+</details>
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+- **React 18.3** - UI Framework
+- **TypeScript** - Type safety
+- **Vite** - Build tool & dev server
+- **TailwindCSS** - Utility-first CSS
+- **Framer Motion** - Animations
+- **React Router** - Navigation
+- **React Query** - Data fetching
+
+### UI Components
+
+- **shadcn/ui** - Beautiful component library
+- **Radix UI** - Accessible primitives
+- **Lucide Icons** - Icon system
+
+### Internationalization
+
+- **i18next** - Translation framework
+- **react-i18next** - React integration
+
+### Development Tools
+
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **TypeScript** - Static typing
+
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js 16+ and npm installed ([install with nvm](https://github.com/nvm-sh/nvm))
+- **Node.js** >= 18.0.0
+- **npm** or **yarn**
 
 ### Installation
 
-1. Clone the repository:
 ```bash
-git clone <YOUR_GIT_URL>
-cd <YOUR_PROJECT_NAME>
-```
+# Clone the repository
+git clone https://github.com/your-username/invento-pos-lite.git
 
-2. Install dependencies:
-```bash
+# Navigate to project directory
+cd invento-pos-lite
+
+# Install dependencies
 npm install
-```
 
-3. Start the development server:
-```bash
+# Start development server
 npm run dev
-```
 
-4. Open your browser and navigate to `http://localhost:8080`
-
-## Backend Integration (TODO)
-
-The application currently uses in-memory mock data. To connect to your ASP.NET Core + PostgreSQL backend:
-
-### 1. Update API Configuration
-
-In `src/services/mockDataService.ts`, update the `API_BASE_URL`:
-
-```typescript
-const API_BASE_URL = 'https://your-api-domain.com/api';
-```
-
-### 2. Replace Mock Functions with Real API Calls
-
-Example for products:
-
-```typescript
-// Before (Mock)
-getAll: async (): Promise<Product[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve([...products]), 100);
-  });
-}
-
-// After (Real API)
-getAll: async (): Promise<Product[]> => {
-  const response = await fetch(`${API_BASE_URL}/products`);
-  if (!response.ok) throw new Error('Failed to fetch products');
-  return response.json();
-}
-```
-
-### 3. API Endpoints to Implement
-
-Your ASP.NET Core backend should provide these endpoints:
-
-**Products:**
-- `GET /api/products` - Get all products
-- `GET /api/products/{id}` - Get product by ID
-- `POST /api/products` - Create new product
-- `PUT /api/products/{id}` - Update product
-- `DELETE /api/products/{id}` - Delete product
-- `GET /api/products/search?q={query}` - Search products
-- `GET /api/products/low-stock` - Get low stock products
-
-**Sales:**
-- `GET /api/sales` - Get all sales
-- `GET /api/sales/{id}` - Get sale by ID
-- `POST /api/sales` - Create new sale
-- `GET /api/sales/today` - Get today's sales
-- `GET /api/sales/date-range?start={date}&end={date}` - Get sales by date range
-
-**Reports:**
-- `GET /api/reports/daily?date={date}` - Get daily report
-- `GET /api/reports/export/pdf?date={date}` - Export report as PDF
-- `GET /api/reports/export/excel?date={date}` - Export report as Excel
-
-**Dashboard:**
-- `GET /api/dashboard/stats` - Get dashboard statistics
-
-## Build for Production
-
-```bash
+# Build for production
 npm run build
 ```
 
-The production build will be in the `dist/` directory.
+The application will be available at `http://localhost:8080`
 
-## Design System
+---
 
-The application uses a professional blue color scheme with semantic tokens defined in `src/index.css` and `tailwind.config.ts`. All colors use HSL format for consistency.
+## 📂 Project Structure
 
-**Key colors:**
-- Primary: Professional blue (`221 83% 53%`)
-- Success: Green for positive metrics
-- Warning: Amber for alerts
-- Destructive: Red for errors
+```
+invento-pos-lite/
+├── src/
+│   ├── components/          # Reusable components
+│   │   ├── animations/      # Animation components
+│   │   ├── ui/             # shadcn/ui components
+│   │   └── ...
+│   ├── pages/              # Page components
+│   │   ├── auth/           # Authentication pages
+│   │   └── ...
+│   ├── layouts/            # Layout components
+│   ├── services/           # API services
+│   ├── types/              # TypeScript types
+│   ├── locales/            # i18n translations
+│   │   ├── en.json        # English
+│   │   └── ar.json        # Arabic
+│   ├── lib/                # Utilities
+│   ├── hooks/              # Custom hooks
+│   └── App.tsx             # Main app component
+├── public/                 # Static assets
+└── package.json
+```
 
-## Contributing
+---
 
-1. Create a feature branch
-2. Make your changes
-3. Test thoroughly
-4. Submit a pull request
+## 🗺️ Development Roadmap
 
-## License
+### ✅ Phase 1: Core Features (Completed)
 
-This project is private and proprietary.
+- [x] Dashboard with analytics
+- [x] Product management
+- [x] Sales/POS interface
+- [x] Invoice generation
+- [x] Reports system
+- [x] Bilingual support (AR/EN)
+- [x] Dark/Light mode
+- [x] Responsive design
+- [x] Animations & transitions
+- [x] Authentication pages
 
-## Support
+### 🚧 Phase 2: Backend Integration (In Progress)
 
-For questions or issues, please contact the development team.
+- [ ] ASP.NET Core API
+- [ ] SQL Server/PostgreSQL database
+- [ ] JWT authentication
+- [ ] RESTful endpoints
+- [ ] User roles & permissions
+
+### 📋 Phase 3: Advanced Features (Planned)
+
+- [ ] Barcode scanning
+- [ ] Multiple payment methods
+- [ ] Customer management
+- [ ] Loyalty programs
+- [ ] Advanced analytics with charts
+- [ ] Email notifications
+- [ ] Multi-store support
+
+### 🎯 Phase 4: Optimization (Future)
+
+- [ ] PWA support
+- [ ] Offline mode
+- [ ] Performance optimization
+- [ ] Automated testing
+- [ ] CI/CD pipeline
+
+---
+
+## 🌍 Internationalization
+
+The app fully supports both **Arabic** and **English** languages:
+
+- ✅ Complete UI translation
+- ✅ RTL/LTR layout switching
+- ✅ Date/time localization
+- ✅ Number formatting
+- ✅ Language toggle in header
+
+To add a new language:
+
+1. Create a new JSON file in `src/locales/`
+2. Add translations following the structure in `en.json`
+3. Import and configure in `src/i18n.ts`
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 👨‍💻 Author
+
+**Mustafa Hussein**
+
+- GitHub: [@your-username](https://github.com/your-username)
+- LinkedIn: [Your Name](https://linkedin.com/in/your-name)
+
+---
+
+## 🙏 Acknowledgments
+
+- [shadcn/ui](https://ui.shadcn.com/) - Beautiful component library
+- [Lucide Icons](https://lucide.dev/) - Icon system
+- [Framer Motion](https://www.framer.com/motion/) - Animation library
+- [i18next](https://www.i18next.com/) - Internationalization framework
+
+---
+
+<div align="center">
+
+### ⭐ Star this repository if you find it helpful!
+
+Made with ❤️ by Mustafa Hussein
+
+</div>
+
+---
+
+---
+
+<a name="arabic"></a>
+
+<div dir="rtl" align="right">
+
+# 🏪 Invento POS - نظام نقاط البيع الاحترافي
+
+## 🌟 المميزات
+
+### ✨ الوظائف الأساسية
+
+- 📊 **لوحة تحكم فورية** - تحليلات ومؤشرات أداء مباشرة
+- 🛒 **نقطة البيع** - واجهة مبيعات سريعة وسهلة
+- 📦 **إدارة المخزون** - تتبع المنتجات والكميات
+- 🧾 **إدارة الفواتير** - إنشاء وطباعة الفواتير
+- 📈 **التقارير والتحليلات** - تقارير مبيعات يومية ورؤى
+- 👥 **دعم متعدد المستخدمين** - التحكم في الصلاحيات (قريباً)
+
+### 🎨 تجربة المستخدم
+
+- 🌐 **دعم ثنائي اللغة** - عربي/إنجليزي كامل مع RTL/LTR
+- 🌓 **الوضع المظلم/الفاتح** - ثيمات مريحة للعين
+- 📱 **متجاوب بالكامل** - يعمل على جميع الأجهزة (موبايل، تابلت، حاسوب)
+- ⚡ **حركات سلسة** - انتقالات مدعومة بـ Framer Motion
+- 🎯 **واجهة بديهية** - تصميم نظيف وعصري
+- ♿ **سهولة الوصول** - متوافق مع معايير WCAG
+
+### 🔐 المصادقة (قيد التطوير)
+
+- 🔑 صفحات تسجيل الدخول/التسجيل
+- 🔒 استعادة كلمة المرور
+- 👤 ملفات المستخدمين
+- 🛡️ حماية المسارات
+
+### 💾 إدارة البيانات
+
+- 💿 **التخزين المحلي** - حفظ البيانات دون اتصال
+- 🔄 **تحديثات فورية** - تحديث الواجهة لحظياً
+- 📥 **تصدير/استيراد** - نسخ احتياطي واستعادة
+- 🖨️ **طباعة الفواتير** - طباعة احترافية
+
+---
+
+## 🚀 البدء السريع
+
+### المتطلبات
+
+- **Node.js** >= 18.0.0
+- **npm** أو **yarn**
+
+### التثبيت
+
+```bash
+# استنساخ المستودع
+git clone https://github.com/your-username/invento-pos-lite.git
+
+# الانتقال إلى مجلد المشروع
+cd invento-pos-lite
+
+# تثبيت المكتبات
+npm install
+
+# تشغيل سيرفر التطوير
+npm run dev
+
+# بناء للإنتاج
+npm run build
+```
+
+التطبيق سيكون متاحاً على `http://localhost:8080`
+
+---
+
+## 🗺️ خارطة الطريق
+
+### ✅ المرحلة 1: الميزات الأساسية (مكتمل)
+
+- [x] لوحة التحكم مع التحليلات
+- [x] إدارة المنتجات
+- [x] واجهة المبيعات/نقطة البيع
+- [x] إنشاء الفواتير
+- [x] نظام التقارير
+- [x] دعم ثنائي اللغة (عربي/إنجليزي)
+- [x] الوضع المظلم/الفاتح
+- [x] التصميم المتجاوب
+- [x] الحركات والانتقالات
+- [x] صفحات المصادقة
+
+### 🚧 المرحلة 2: ربط Backend (قيد العمل)
+
+- [ ] ASP.NET Core API
+- [ ] قاعدة بيانات SQL Server/PostgreSQL
+- [ ] مصادقة JWT
+- [ ] RESTful endpoints
+- [ ] أدوار وصلاحيات المستخدمين
+
+### 📋 المرحلة 3: ميزات متقدمة (مخطط)
+
+- [ ] مسح الباركود
+- [ ] طرق دفع متعددة
+- [ ] إدارة العملاء
+- [ ] برامج الولاء
+- [ ] تحليلات متقدمة مع رسوم بيانية
+- [ ] إشعارات البريد الإلكتروني
+- [ ] دعم عدة فروع
+
+### 🎯 المرحلة 4: التحسين (مستقبلي)
+
+- [ ] دعم PWA
+- [ ] الوضع دون اتصال
+- [ ] تحسين الأداء
+- [ ] الاختبارات التلقائية
+- [ ] خط CI/CD
+
+---
+
+## 🛠️ التقنيات المستخدمة
+
+### الواجهة الأمامية
+
+- **React 18.3** - إطار عمل الواجهة
+- **TypeScript** - الأمان النوعي
+- **Vite** - أداة البناء وسيرفر التطوير
+- **TailwindCSS** - CSS المساعد
+- **Framer Motion** - الحركات
+- **React Router** - التنقل
+- **React Query** - جلب البيانات
+
+### مكونات الواجهة
+
+- **shadcn/ui** - مكتبة مكونات جميلة
+- **Radix UI** - عناصر قابلة للوصول
+- **Lucide Icons** - نظام الأيقونات
+
+### الترجمة
+
+- **i18next** - إطار الترجمة
+- **react-i18next** - تكامل React
+
+---
+
+## 🤝 المساهمة
+
+المساهمات مرحب بها! يرجى اتباع هذه الخطوات:
+
+1. Fork المستودع
+2. إنشاء فرع للميزة (`git checkout -b feature/ميزة-رائعة`)
+3. Commit التغييرات (`git commit -m 'إضافة ميزة رائعة'`)
+4. Push للفرع (`git push origin feature/ميزة-رائعة`)
+5. فتح Pull Request
+
+---
+
+## 📝 الترخيص
+
+هذا المشروع مرخص بموجب رخصة MIT - راجع ملف [LICENSE](LICENSE) للتفاصيل.
+
+---
+
+## 👨‍💻 المطور
+
+**مصطفى حسين**
+
+- GitHub: [@your-username](https://github.com/your-username)
+- LinkedIn: [الاسم](https://linkedin.com/in/your-name)
+
+---
+
+<div align="center">
+
+### ⭐ ضع نجمة للمستودع إذا أعجبك!
+
+صُنع بـ ❤️ بواسطة مصطفى حسين
+
+</div>
+
+</div>
