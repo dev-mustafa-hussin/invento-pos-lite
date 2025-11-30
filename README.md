@@ -65,38 +65,86 @@
 <details open>
 <summary>Click to view screenshots</summary>
 
-### Dashboard - Arabic & English
+### 🌙 Dark Mode Showcase
+
+#### Dashboard
 
 <p align="center">
-  <img src="./assets/screenshots/dashboard-ar.png" alt="Dashboard Arabic" width="49%"/>
-  <img src="./assets/screenshots/dashboard-en.png" alt="Dashboard English" width="49%"/>
+  <img src="./assets/screenshots/dashboard-dark.png" alt="Dashboard Dark Mode" width="800"/>
 </p>
 
-### Point of Sale - Desktop & Mobile
+#### Products Management
 
 <p align="center">
-  <img src="./assets/screenshots/sales-desktop.png" alt="Sales Desktop" width="65%"/>
-  <img src="./assets/screenshots/sales-mobile.png" alt="Sales Mobile" width="30%"/>
+  <img src="./assets/screenshots/products-dark.png" alt="Products Dark Mode" width="800"/>
 </p>
 
-### Products Management
+#### Point of Sale
 
 <p align="center">
-  <img src="./assets/screenshots/products.png" alt="Products Page" width="800"/>
+  <img src="./assets/screenshots/sales-dark.png" alt="Sales Dark Mode" width="800"/>
 </p>
 
-### Light Mode
+#### Invoices
 
 <p align="center">
-  <img src="./assets/screenshots/light-mode.png" alt="Light Mode" width="800"/>
+  <img src="./assets/screenshots/invoices-dark.png" alt="Invoices Dark Mode" width="800"/>
 </p>
 
-### Authentication Pages
+#### Reports & Analytics
+
+<p align="center">
+  <img src="./assets/screenshots/reports-dark.png" alt="Reports Dark Mode" width="800"/>
+</p>
+
+---
+
+### ☀️ Light Mode Showcase
+
+#### Dashboard
+
+<p align="center">
+  <img src="./assets/screenshots/dashboard-light.png" alt="Dashboard Light Mode" width="800"/>
+</p>
+
+#### Products Management
+
+<p align="center">
+  <img src="./assets/screenshots/products-light.png" alt="Products Light Mode" width="800"/>
+</p>
+
+#### Point of Sale
+
+<p align="center">
+  <img src="./assets/screenshots/sales-light.png" alt="Sales Light Mode" width="800"/>
+</p>
+
+#### Invoices
+
+<p align="center">
+  <img src="./assets/screenshots/invoices-light.png" alt="Invoices Light Mode" width="800"/>
+</p>
+
+#### Reports & Analytics
+
+<p align="center">
+  <img src="./assets/screenshots/reports-light.png" alt="Reports Light Mode" width="800"/>
+</p>
+
+---
+
+### 🔐 Authentication Pages
 
 <p align="center">
   <img src="./assets/screenshots/login.png" alt="Login" width="32%"/>
   <img src="./assets/screenshots/register.png" alt="Register" width="32%"/>
   <img src="./assets/screenshots/profile.png" alt="Profile" width="32%"/>
+</p>
+
+### 📱 Mobile View
+
+<p align="center">
+  <img src="./assets/screenshots/sales-mobile.png" alt="Sales Mobile" width="300"/>
 </p>
 
 </details>
