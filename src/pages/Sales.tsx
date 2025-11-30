@@ -9,6 +9,9 @@ import { Product, SaleItem, SaleInvoice } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { Receipt } from '@/components/Receipt';
 import { useTranslation } from 'react-i18next';
+import { PageTransition } from '@/components/PageTransition';
+import { AnimatedCard } from '@/components/animations/AnimatedCard';
+import { StaggerContainer, StaggerItem } from '@/components/animations/FadeIn';
 
 export default function Sales() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -169,7 +172,7 @@ export default function Sales() {
   };
 
   return (
-    <>
+    <PageTransition>
       <div className="space-y-4 md:space-y-6 print:hidden">
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
           <div>
@@ -196,10 +199,11 @@ export default function Sales() {
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 max-h-[calc(100vh-400px)] lg:max-h-[calc(100vh-300px)] overflow-y-auto">
-              {filteredProducts.map((product) => (
-                <Card key={product.id} className="cursor-pointer hover:shadow-md transition-shadow">
-                  <CardContent className="p-4">
+            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 max-h-[calc(100vh-400px)] lg:max-h-[calc(100vh-300px)] overflow-y-auto">
+              {filteredProducts.map((product, index) => (
+                <StaggerItem key={product.id}>
+                  <AnimatedCard onClick={() => addToCart(product)}>
+                    <CardContent className="p-4">
                     <div className="flex justify-between items-start mb-2">
                       <div className="flex-1">
                         <h3 className="font-semibold text-foreground">{product.name}</h3>
@@ -218,10 +222,11 @@ export default function Sales() {
                         Add
                       </Button>
                     </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </AnimatedCard>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerContainer>
           </div>
 
           <div className="space-y-4 order-1 lg:order-2">
@@ -343,6 +348,6 @@ export default function Sales() {
       </div>
       
       {lastSale && <Receipt ref={receiptRef} invoice={lastSale} />}
-    </>
+    </PageTransition>
   );
 }
