@@ -1,25 +1,3 @@
-<div align="center">
-
-# 🏪 Invento POS - نظام نقاط البيع الاحترافي
-
-### Point of Sale & Inventory Management System
-
-### نظام متكامل لإدارة المبيعات والمخزون
-
-[![React](https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
-[![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=for-the-badge&logo=vite)](https://vitejs.dev/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
-
-<p align="center">
-  <img src="./docs/screenshots/dashboard-preview.png" alt="Invento POS Dashboard" width="800"/>
-</p>
-
-**[English](#english)** | **[العربية](#arabic)**
-
-</div>
-
 ---
 
 <a name="english"></a>
@@ -56,35 +34,6 @@
 - 💿 **Local Storage** - Offline data persistence
 - 🔄 **Real-time Updates** - Instant UI updates
 - 📥 **Export/Import** - Backup and restore data
-- 🖨️ **Print Receipts** - Professional invoice printing
-
----
-
-## 📸 Screenshots
-
-<details>
-<summary>Click to view screenshots</summary>
-
-### Dashboard
-
-<img src="./docs/screenshots/dashboard-ar.png" alt="Dashboard Arabic" width="400"/> <img src="./docs/screenshots/dashboard-en.png" alt="Dashboard English" width="400"/>
-
-### Point of Sale
-
-<img src="./docs/screenshots/sales-mobile.png" alt="Sales Mobile" width="250"/> <img src="./docs/screenshots/sales-desktop.png" alt="Sales Desktop" width="550"/>
-
-### Dark Mode
-
-<img src="./docs/screenshots/dark-mode.png" alt="Dark Mode" width="400"/> <img src="./docs/screenshots/light-mode.png" alt="Light Mode" width="400"/>
-
-### Authentication
-
-<img src="./docs/screenshots/login.png" alt="Login" width="250"/> <img src="./docs/screenshots/register.png" alt="Register" width="250"/> <img src="./docs/screenshots/profile.png" alt="Profile" width="250"/>
-
-</details>
-
----
-
 ## 🛠️ Tech Stack
 
 ### Frontend
