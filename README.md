@@ -60,6 +60,49 @@
 
 ---
 
+## 📸 Screenshots
+
+<details open>
+<summary>Click to view screenshots</summary>
+
+### Dashboard - Arabic & English
+
+<p align="center">
+  <img src="./assets/screenshots/dashboard-ar.png" alt="Dashboard Arabic" width="49%"/>
+  <img src="./assets/screenshots/dashboard-en.png" alt="Dashboard English" width="49%"/>
+</p>
+
+### Point of Sale - Desktop & Mobile
+
+<p align="center">
+  <img src="./assets/screenshots/sales-desktop.png" alt="Sales Desktop" width="65%"/>
+  <img src="./assets/screenshots/sales-mobile.png" alt="Sales Mobile" width="30%"/>
+</p>
+
+### Products Management
+
+<p align="center">
+  <img src="./assets/screenshots/products.png" alt="Products Page" width="800"/>
+</p>
+
+### Light Mode
+
+<p align="center">
+  <img src="./assets/screenshots/light-mode.png" alt="Light Mode" width="800"/>
+</p>
+
+### Authentication Pages
+
+<p align="center">
+  <img src="./assets/screenshots/login.png" alt="Login" width="32%"/>
+  <img src="./assets/screenshots/register.png" alt="Register" width="32%"/>
+  <img src="./assets/screenshots/profile.png" alt="Profile" width="32%"/>
+</p>
+
+</details>
+
+---
+
 ## 🛠️ Tech Stack
 
 ### Frontend
@@ -298,17 +341,6 @@ Made with ❤️ by Mustafa Hussein
 - 🔄 **تحديثات فورية** - تحديث الواجهة لحظياً
 - 📥 **تصدير/استيراد** - نسخ احتياطي واستعادة
 - 🖨️ **طباعة الفواتير** - طباعة احترافية
-
----
-
-## 📸 صور المشروع
-
-## 🚀 البدء السريع
-
-### المتطلبات
-
-- **Node.js** >= 18.0.0
-- **npm** أو **yarn**
 
 ### التثبيت
 
