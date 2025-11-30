@@ -13,7 +13,7 @@
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
 
 <p align="center">
-  <img src="./public/assets/screenshots/dashboard-ar.png" alt="Invento POS Dashboard" width="800"/>
+  <img src="./assets/screenshots/dashboard-ar.png" alt="Invento POS Dashboard" width="800"/>
 </p>
 
 **[English](#english)** | **[العربية](#arabic)**
@@ -57,49 +57,6 @@
 - 🔄 **Real-time Updates** - Instant UI updates
 - 📥 **Export/Import** - Backup and restore data
 - 🖨️ **Print Receipts** - Professional invoice printing
-
----
-
-## 📸 Screenshots
-
-<details open>
-<summary>Click to view screenshots</summary>
-
-### Dashboard - Arabic & English
-
-<p align="center">
-  <img src="./public/assets/screenshots/dashboard-ar.png" alt="Dashboard Arabic" width="49%"/>
-  <img src="./public/assets/screenshots/dashboard-en.png" alt="Dashboard English" width="49%"/>
-</p>
-
-### Point of Sale - Desktop & Mobile
-
-<p align="center">
-  <img src="./public/assets/screenshots/sales-desktop.png" alt="Sales Desktop" width="65%"/>
-  <img src="./public/assets/screenshots/sales-mobile.png" alt="Sales Mobile" width="30%"/>
-</p>
-
-### Products Management
-
-<p align="center">
-  <img src="./public/assets/screenshots/products.png" alt="Products Page" width="800"/>
-</p>
-
-### Light Mode
-
-<p align="center">
-  <img src="./public/assets/screenshots/light-mode.png" alt="Light Mode" width="800"/>
-</p>
-
-### Authentication Pages
-
-<p align="center">
-  <img src="./public/assets/screenshots/login.png" alt="Login" width="32%"/>
-  <img src="./public/assets/screenshots/register.png" alt="Register" width="32%"/>
-  <img src="./public/assets/screenshots/profile.png" alt="Profile" width="32%"/>
-</p>
-
-</details>
 
 ---
 
@@ -345,47 +302,6 @@ Made with ❤️ by Mustafa Hussein
 ---
 
 ## 📸 صور المشروع
-
-<details open>
-<summary>اضغط لعرض الصور</summary>
-
-### لوحة التحكم - عربي وإنجليزي
-
-<p align="center">
-  <img src="./public/assets/screenshots/dashboard-ar.png" alt="لوحة التحكم بالعربي" width="49%"/>
-  <img src="./public/assets/screenshots/dashboard-en.png" alt="لوحة التحكم بالإنجليزي" width="49%"/>
-</p>
-
-### نقطة البيع - ديسك توب وموبايل
-
-<p align="center">
-  <img src="./public/assets/screenshots/sales-desktop.png" alt="المبيعات على الشاشة الكبيرة" width="65%"/>
-  <img src="./public/assets/screenshots/sales-mobile.png" alt="المبيعات على الموبايل" width="30%"/>
-</p>
-
-### إدارة المنتجات
-
-<p align="center">
-  <img src="./public/assets/screenshots/products.png" alt="صفحة المنتجات" width="800"/>
-</p>
-
-### الوضع الفاتح
-
-<p align="center">
-  <img src="./public/assets/screenshots/light-mode.png" alt="الوضع الفاتح" width="800"/>
-</p>
-
-### صفحات المصادقة
-
-<p align="center">
-  <img src="./public/assets/screenshots/login.png" alt="تسجيل الدخول" width="32%"/>
-  <img src="./public/assets/screenshots/register.png" alt="التسجيل" width="32%"/>
-  <img src="./public/assets/screenshots/profile.png" alt="الملف الشخصي" width="32%"/>
-</p>
-
-</details>
-
----
 
 ## 🚀 البدء السريع
 
