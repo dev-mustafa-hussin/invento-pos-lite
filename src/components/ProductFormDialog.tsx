@@ -20,6 +20,8 @@ import { Product } from '@/types';
 import { productsAPI } from '@/services/mockDataService';
 import { useToast } from '@/hooks/use-toast';
 
+// TODO: Add form validation (Zod or similar) when adding dependencies for production-quality validation
+
 interface ProductFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -35,13 +37,12 @@ export function ProductFormDialog({ open, onOpenChange, product, onSuccess }: Pr
   const [formData, setFormData] = useState({
     name: '',
     sku: '',
-    barcode: '',
     category: 'Electronics',
     unitPrice: '',
     costPrice: '',
     stock: '',
     minimumStock: '',
-    status: 'active' as 'active' | 'inactive',
+    status: 'active',
   });
 
   useEffect(() => {
@@ -49,7 +50,6 @@ export function ProductFormDialog({ open, onOpenChange, product, onSuccess }: Pr
       setFormData({
         name: product.name,
         sku: product.sku,
-        barcode: product.barcode || '',
         category: product.category,
         unitPrice: product.unitPrice.toString(),
         costPrice: product.costPrice.toString(),
@@ -61,7 +61,6 @@ export function ProductFormDialog({ open, onOpenChange, product, onSuccess }: Pr
       setFormData({
         name: '',
         sku: '',
-        barcode: '',
         category: 'Electronics',
         unitPrice: '',
         costPrice: '',
@@ -77,16 +76,16 @@ export function ProductFormDialog({ open, onOpenChange, product, onSuccess }: Pr
     setLoading(true);
 
     try {
-      const data = {
+      // TODO: Add runtime validation with Zod/similar when adding dependencies
+      const data: Omit<Product, 'id' | 'createdAt' | 'updatedAt'> = {
         name: formData.name,
         sku: formData.sku,
-        barcode: formData.barcode || undefined,
         category: formData.category,
         unitPrice: parseFloat(formData.unitPrice),
         costPrice: parseFloat(formData.costPrice),
         stock: parseInt(formData.stock),
         minimumStock: parseInt(formData.minimumStock),
-        status: formData.status,
+        status: formData.status as 'active' | 'inactive',
       };
 
       if (product) {
@@ -105,6 +104,7 @@ export function ProductFormDialog({ open, onOpenChange, product, onSuccess }: Pr
 
       onSuccess();
     } catch (error) {
+      console.error(error);
       toast({
         title: 'Error',
         description: 'Failed to save product',
@@ -145,15 +145,6 @@ export function ProductFormDialog({ open, onOpenChange, product, onSuccess }: Pr
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="barcode">Barcode</Label>
-              <Input
-                id="barcode"
-                value={formData.barcode}
-                onChange={(e) => setFormData({ ...formData, barcode: e.target.value })}
-              />
-            </div>
-
-            <div className="space-y-2">
               <Label htmlFor="category">Category *</Label>
               <Select
                 value={formData.category}
@@ -173,7 +164,7 @@ export function ProductFormDialog({ open, onOpenChange, product, onSuccess }: Pr
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="unitPrice">Unit Price *</Label>
+              <Label htmlFor="unitPrice">Price *</Label>
               <Input
                 id="unitPrice"
                 type="number"
@@ -226,7 +217,7 @@ export function ProductFormDialog({ open, onOpenChange, product, onSuccess }: Pr
               <Label htmlFor="status">Status *</Label>
               <Select
                 value={formData.status}
-                onValueChange={(value: 'active' | 'inactive') => 
+                onValueChange={(value) => 
                   setFormData({ ...formData, status: value })
                 }
               >

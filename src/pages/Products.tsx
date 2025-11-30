@@ -9,6 +9,8 @@ import { Product } from '@/types';
 import { ProductFormDialog } from '@/components/ProductFormDialog';
 import { useToast } from '@/hooks/use-toast';
 
+// TODO: Replace mockDataService with real API client when ASP.NET Core backend available
+
 export default function Products() {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -133,7 +135,7 @@ export default function Products() {
             header: 'Status', 
             accessor: (row) => (
               <Badge variant={row.status === 'active' ? 'default' : 'secondary'}>
-                {row.status}
+                {row.status === 'active' ? 'Active' : 'Inactive'}
               </Badge>
             )
           },

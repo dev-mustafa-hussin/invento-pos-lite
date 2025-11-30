@@ -6,6 +6,8 @@ import { Calendar, Download, FileText } from 'lucide-react';
 import { reportsAPI } from '@/services/mockDataService';
 import { DailyReport } from '@/types';
 
+// TODO: Replace reportsAPI.getDailyReport with real GET /api/reports/daily?date=YYYY-MM-DD
+
 export default function Reports() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [report, setReport] = useState<DailyReport | null>(null);
@@ -114,14 +116,11 @@ export default function Reports() {
         <CardContent>
           {report?.topProducts && report.topProducts.length > 0 ? (
             <DataTable
-              data={report.topProducts.map((p, index) => ({ ...p, id: p.productId }))}
+              data={report.topProducts.map((p, index) => ({ ...p, id: `top-${index}` }))}
               columns={[
                 { 
                   header: '#', 
-                  accessor: (row) => {
-                    const index = report.topProducts.findIndex(p => p.productId === row.productId);
-                    return index + 1;
-                  }
+                  accessor: (row, idx) => (idx ? idx + 1 : 1)
                 },
                 { header: 'Product', accessor: 'productName' },
                 { header: 'Quantity Sold', accessor: 'quantitySold' },

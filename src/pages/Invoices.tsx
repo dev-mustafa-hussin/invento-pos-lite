@@ -7,6 +7,8 @@ import { Search, Calendar } from 'lucide-react';
 import { salesAPI } from '@/services/mockDataService';
 import { SaleInvoice } from '@/types';
 
+// TODO: Replace salesAPI.getAll with real GET /api/sales endpoint
+
 export default function Invoices() {
   const [invoices, setInvoices] = useState<SaleInvoice[]>([]);
   const [filteredInvoices, setFilteredInvoices] = useState<SaleInvoice[]>([]);
@@ -76,11 +78,7 @@ export default function Invoices() {
           { header: 'Invoice #', accessor: 'invoiceNumber' },
           { 
             header: 'Date', 
-            accessor: (row) => new Date(row.date).toLocaleString()
-          },
-          { 
-            header: 'Customer', 
-            accessor: (row) => row.customerName || '-'
+            accessor: (row) => new Date(row.date).toLocaleDateString()
           },
           { 
             header: 'Items', 
@@ -95,14 +93,6 @@ export default function Invoices() {
             accessor: (row) => (
               <Badge variant="outline">
                 {row.paymentMethod}
-              </Badge>
-            )
-          },
-          { 
-            header: 'Status', 
-            accessor: (row) => (
-              <Badge variant={row.status === 'completed' ? 'default' : 'destructive'}>
-                {row.status}
               </Badge>
             )
           },
