@@ -10,9 +10,12 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 export function UserNav() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  
   // Mock: In a real app, you'd get this from auth context
   const isLoggedIn = false;
   const user = {
@@ -45,28 +48,28 @@ export function UserNav() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate('/profile')}>
               <User className="mr-2 h-4 w-4" />
               <span>{t('user.profile')}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate('/login')}>
               <LogOut className="mr-2 h-4 w-4" />
               <span>{t('app.logout')}</span>
             </DropdownMenuItem>
           </>
         ) : (
           <>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate('/login')}>
               <LogIn className="mr-2 h-4 w-4" />
               <span>{t('user.login')}</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate('/register')}>
               <UserPlus className="mr-2 h-4 w-4" />
               <span>{t('user.register')}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate('/forgot-password')}>
               <KeyRound className="mr-2 h-4 w-4" />
               <span>{t('user.forgotPassword')}</span>
             </DropdownMenuItem>

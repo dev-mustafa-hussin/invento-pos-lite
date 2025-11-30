@@ -12,6 +12,10 @@ import Invoices from "./pages/Invoices";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import Profile from "./pages/auth/Profile";
 import './i18n';
 
 const queryClient = new QueryClient();
@@ -24,6 +28,12 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
+            {/* Auth Routes - No Layout */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            
+            {/* App Routes - With Layout */}
             <Route element={<AppLayout />}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/products" element={<Products />} />
@@ -31,7 +41,9 @@ const App = () => (
               <Route path="/invoices" element={<Invoices />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="/settings" element={<Settings />} />
+              <Route path="/profile" element={<Profile />} />
             </Route>
+            
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
