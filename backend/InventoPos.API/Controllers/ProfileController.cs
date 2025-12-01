@@ -63,6 +63,17 @@ public class ProfileController : ControllerBase
             user.JobTitle
         });
     }
+    [HttpGet("check-email")]
+    [AllowAnonymous]
+    public async Task<IActionResult> CheckEmail(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user != null)
+        {
+            return Ok(new { exists = true, email = user.Email });
+        }
+        return Ok(new { exists = false });
+    }
 }
 
 public class UpdateProfileRequest
