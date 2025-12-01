@@ -198,3 +198,9 @@ K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos
 K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.API\bin\Debug\net10.0\runtimes\win-arm64\native\e_sqlite3.dll
 K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.API\bin\Debug\net10.0\runtimes\win-x64\native\e_sqlite3.dll
 K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.API\bin\Debug\net10.0\runtimes\win-x86\native\e_sqlite3.dll
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.API\bin\Debug\net10.0\publish\web.config
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.API\bin\Debug\net10.0\publish\appsettings.Development.json
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.API\bin\Debug\net10.0\publish\appsettings.json
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.API\bin\Debug\net10.0\publish\InventoPos.API.deps.json
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.API\bin\Debug\net10.0\publish\InventoPos.API.runtimeconfig.json
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.API\bin\Debug\net10.0\publish\InventoPos.API.staticwebassets.endpoints.json
