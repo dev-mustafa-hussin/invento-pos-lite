@@ -36,7 +36,8 @@ export default function Register() {
 
     try {
       // Call the register endpoint (ASP.NET Core Identity default is /register)
-      await axios.post(`${import.meta.env.VITE_API_URL}/register`, {
+      const apiUrl = import.meta.env.VITE_API_URL.replace(/\/api$/, '');
+      await axios.post(`${apiUrl}/register`, {
         email: formData.email,
         password: formData.password,
       });

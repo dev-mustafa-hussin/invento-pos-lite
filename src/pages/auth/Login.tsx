@@ -26,7 +26,8 @@ export default function Login() {
       // Call the login endpoint (ASP.NET Core Identity default is /login)
       // Note: We use ?useCookies=true if we want cookies, or default for Bearer tokens.
       // Let's assume Bearer tokens for now as it's standard for SPAs with this setup.
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/login`, {
+      const apiUrl = import.meta.env.VITE_API_URL.replace(/\/api$/, '');
+      const response = await axios.post(`${apiUrl}/login`, {
         email,
         password,
       });
