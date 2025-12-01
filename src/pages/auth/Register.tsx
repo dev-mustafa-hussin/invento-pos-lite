@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -33,13 +34,21 @@ export default function Register() {
 
     setLoading(true);
 
-    // TODO: Replace with real API call
-    setTimeout(() => {
-      console.log('Register:', formData);
+    try {
+      // Call the register endpoint (ASP.NET Core Identity default is /register)
+      await axios.post(`${import.meta.env.VITE_API_URL}/register`, {
+        email: formData.email,
+        password: formData.password,
+      });
+
+      alert(i18n.language === 'ar' ? 'تم إنشاء الحساب بنجاح! يمكنك تسجيل الدخول الآن.' : 'Account created successfully! You can now login.');
+      navigate('/login');
+    } catch (error) {
+      console.error('Registration failed:', error);
+      alert(i18n.language === 'ar' ? 'فشل إنشاء الحساب. قد يكون البريد الإلكتروني مستخدماً بالفعل.' : 'Registration failed. Email might be already in use.');
+    } finally {
       setLoading(false);
-      alert('Registration functionality will be implemented with backend');
-      // navigate('/login');
-    }, 1500);
+    }
   };
 
   const handleChange = (field: string, value: string) => {

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -21,13 +22,30 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
 
-    // TODO: Replace with real API call
-    setTimeout(() => {
-      console.log('Login:', { email, password });
+    try {
+      // Call the login endpoint (ASP.NET Core Identity default is /login)
+      // Note: We use ?useCookies=true if we want cookies, or default for Bearer tokens.
+      // Let's assume Bearer tokens for now as it's standard for SPAs with this setup.
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/login`, {
+        email,
+        password,
+      });
+
+      // Store the token
+      const { accessToken, refreshToken } = response.data;
+      localStorage.setItem('accessToken', accessToken);
+      if (refreshToken) {
+        localStorage.setItem('refreshToken', refreshToken);
+      }
+
+      // Navigate to dashboard
+      navigate('/');
+    } catch (error) {
+      console.error('Login failed:', error);
+      alert(i18n.language === 'ar' ? 'فشل تسجيل الدخول. يرجى التحقق من بياناتك.' : 'Login failed. Please check your credentials.');
+    } finally {
       setLoading(false);
-      // navigate('/');
-      alert('Login functionality will be implemented with backend');
-    }, 1500);
+    }
   };
 
   return (
