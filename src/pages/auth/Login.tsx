@@ -23,26 +23,38 @@ export default function Login() {
     setLoading(true);
 
     try {
+      console.log('Starting login request...');
       // Call the login endpoint (ASP.NET Core Identity default is /login)
       // Note: We use ?useCookies=true if we want cookies, or default for Bearer tokens.
       // Let's assume Bearer tokens for now as it's standard for SPAs with this setup.
       const apiUrl = import.meta.env.VITE_API_URL.replace(/\/api$/, '');
+      console.log(`Login URL: ${apiUrl}/login`);
+      
       const response = await axios.post(`${apiUrl}/login`, {
         email,
         password,
       });
 
+      console.log('Login response received:', response.status);
+
       // Store the token
       const { accessToken, refreshToken } = response.data;
+      console.log('Tokens received:', { accessToken: !!accessToken, refreshToken: !!refreshToken });
+      
       localStorage.setItem('accessToken', accessToken);
       if (refreshToken) {
         localStorage.setItem('refreshToken', refreshToken);
       }
 
+      console.log('Navigating to dashboard...');
       // Navigate to dashboard
       navigate('/');
     } catch (error) {
       console.error('Login failed:', error);
+      if (axios.isAxiosError(error)) {
+        console.error('Response data:', error.response?.data);
+        console.error('Response status:', error.response?.status);
+      }
       alert(i18n.language === 'ar' ? 'فشل تسجيل الدخول. يرجى التحقق من بياناتك.' : 'Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
