@@ -11,6 +11,7 @@ import { PageTransition } from '@/components/PageTransition';
 import { FadeIn } from '@/components/animations/FadeIn';
 
 export default function Login() {
+  console.log('Login component rendered');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
