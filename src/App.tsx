@@ -19,6 +19,7 @@ import ProjectDetails from "./pages/projects/ProjectDetails";
 import Settings from "./pages/Settings";
 import Suppliers from "./pages/purchases/Suppliers";
 import PurchaseOrders from "./pages/purchases/PurchaseOrders";
+import Inventory from "./pages/inventory/Inventory";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -57,7 +58,9 @@ const App = () => (
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/suppliers" element={<Suppliers />} />
+                <Route path="/suppliers" element={<Suppliers />} />
                 <Route path="/purchase-orders" element={<PurchaseOrders />} />
+                <Route path="/inventory" element={<Inventory />} />
               </Route>
             </Route>
             

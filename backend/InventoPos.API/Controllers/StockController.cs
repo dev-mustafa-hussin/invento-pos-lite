@@ -1,4 +1,5 @@
 using InventoPos.Application.Inventory.Commands.AdjustStock;
+using InventoPos.Application.Inventory.Commands.TransferStock;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,5 +27,15 @@ public class StockController : ControllerBase
             return BadRequest("Failed to adjust stock.");
         }
         return Ok(new { Message = "Stock adjusted successfully." });
+    }
+    [HttpPost("transfer")]
+    public async Task<IActionResult> TransferStock([FromBody] TransferStockCommand command)
+    {
+        var result = await _mediator.Send(command);
+        if (!result)
+        {
+            return BadRequest("Failed to transfer stock.");
+        }
+        return Ok(new { Message = "Stock transferred successfully." });
     }
 }
