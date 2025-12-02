@@ -1,0 +1,16 @@
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Application\obj\Debug\net10.0\InventoPos.Application.csproj.AssemblyReference.cache
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Application\obj\Debug\net10.0\InventoPos.Application.GeneratedMSBuildEditorConfig.editorconfig
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Application\obj\Debug\net10.0\InventoPos.Application.AssemblyInfoInputs.cache
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Application\obj\Debug\net10.0\InventoPos.Application.AssemblyInfo.cs
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Application\obj\Debug\net10.0\InventoPos.Application.csproj.CoreCompileInputs.cache
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Application\obj\Debug\net10.0\InventoPos.Application.sourcelink.json
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Application\bin\Debug\net10.0\InventoPos.Application.deps.json
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Application\bin\Debug\net10.0\InventoPos.Application.dll
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Application\bin\Debug\net10.0\InventoPos.Application.pdb
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Application\bin\Debug\net10.0\InventoPos.Domain.dll
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Application\bin\Debug\net10.0\InventoPos.Domain.pdb
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Application\obj\Debug\net10.0\InventoP.1D544B3E.Up2Date
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Application\obj\Debug\net10.0\InventoPos.Application.dll
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Application\obj\Debug\net10.0\refint\InventoPos.Application.dll
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Application\obj\Debug\net10.0\InventoPos.Application.pdb
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Application\obj\Debug\net10.0\ref\InventoPos.Application.dll

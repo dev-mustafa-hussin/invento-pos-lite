@@ -1,100 +1,34 @@
-using InventoPos.API.Data;
-using InventoPos.API.Models;
+using InventoPos.Application.Inventory.Commands.CreateProduct;
+using InventoPos.Application.Inventory.Queries.GetProducts;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace InventoPos.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class ProductsController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IMediator _mediator;
 
-    public ProductsController(ApplicationDbContext context)
+    public ProductsController(IMediator mediator)
     {
-        _context = context;
+        _mediator = mediator;
     }
 
-    // GET: api/Products
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+    public async Task<IActionResult> GetProducts([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] int? categoryId = null)
     {
-        return await _context.Products.Include(p => p.Category).ToListAsync();
+        var products = await _mediator.Send(new GetProductsQuery(page, pageSize, categoryId));
+        return Ok(products);
     }
 
-    // GET: api/Products/5
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Product>> GetProduct(int id)
-    {
-        var product = await _context.Products.Include(p => p.Category).FirstOrDefaultAsync(p => p.Id == id);
-
-        if (product == null)
-        {
-            return NotFound();
-        }
-
-        return product;
-    }
-
-    // POST: api/Products
     [HttpPost]
-    public async Task<ActionResult<Product>> PostProduct(Product product)
+    public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand command)
     {
-        _context.Products.Add(product);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction("GetProduct", new { id = product.Id }, product);
-    }
-
-    // PUT: api/Products/5
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutProduct(int id, Product product)
-    {
-        if (id != product.Id)
-        {
-            return BadRequest();
-        }
-
-        _context.Entry(product).State = EntityState.Modified;
-
-        try
-        {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!ProductExists(id))
-            {
-                return NotFound();
-            }
-            else
-            {
-                throw;
-            }
-        }
-
-        return NoContent();
-    }
-
-    // DELETE: api/Products/5
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteProduct(int id)
-    {
-        var product = await _context.Products.FindAsync(id);
-        if (product == null)
-        {
-            return NotFound();
-        }
-
-        _context.Products.Remove(product);
-        await _context.SaveChangesAsync();
-
-        return NoContent();
-    }
-
-    private bool ProductExists(int id)
-    {
-        return _context.Products.Any(e => e.Id == id);
+        var productId = await _mediator.Send(command);
+        return Ok(new { ProductId = productId });
     }
 }

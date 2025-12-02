@@ -1,166 +1,194 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { DataTable } from '@/components/DataTable';
-import { Calendar, Download, FileText } from 'lucide-react';
-import { reportsAPI } from '@/services/mockDataService';
-import { DailyReport } from '@/types';
-import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { reportsService } from '@/services/reportsService';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DatePickerWithRange } from '@/components/ui/date-range-picker';
+import { addDays, format } from 'date-fns';
+import { DateRange } from 'react-day-picker';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+} from 'recharts';
+import { Loader2, AlertTriangle } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
-import { StatCardSkeleton, TableSkeleton } from '@/components/LoadingSkeleton';
-
-// TODO: Replace reportsAPI.getDailyReport with real GET /api/reports/daily?date=YYYY-MM-DD
+import { useTranslation } from 'react-i18next';
+import { DataTable } from '@/components/DataTable';
+import { Badge } from '@/components/ui/badge';
 
 export default function Reports() {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [report, setReport] = useState<DailyReport | null>(null);
-  const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: addDays(new Date(), -30),
+    to: new Date(),
+  });
 
-  useEffect(() => {
-    loadReport();
-  }, [selectedDate]);
+  const { data: salesData, isLoading: salesLoading } = useQuery({
+    queryKey: ['salesReport', dateRange],
+    queryFn: () =>
+      reportsService.getSalesReport(
+        dateRange?.from?.toISOString(),
+        dateRange?.to?.toISOString()
+      ),
+    enabled: !!dateRange?.from && !!dateRange?.to,
+  });
 
-  const loadReport = async () => {
-    setLoading(true);
-    try {
-      const data = await reportsAPI.getDailyReport(selectedDate);
-      setReport(data);
-    } catch (error) {
-      console.error('Failed to load report:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { data: topProducts, isLoading: topProductsLoading } = useQuery({
+    queryKey: ['topProducts'],
+    queryFn: () => reportsService.getTopProducts(5),
+  });
 
-  const handleExportPDF = () => {
-    // TODO: Implement PDF export with backend API
-    alert('PDF export will be implemented with backend integration');
-  };
-
-  const handleExportExcel = () => {
-    // TODO: Implement Excel export with backend API
-    alert('Excel export will be implemented with backend integration');
-  };
+  const { data: lowStock, isLoading: lowStockLoading } = useQuery({
+    queryKey: ['lowStock'],
+    queryFn: reportsService.getLowStock,
+  });
 
   return (
     <PageTransition>
-      <div className="space-y-4 md:space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-foreground">Daily Reports</h1>
-            <p className="text-sm md:text-base text-muted-foreground mt-1">Sales analytics and insights</p>
-          </div>
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={handleExportPDF} className="flex-1 sm:flex-none">
-              <Download className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Export PDF</span>
-              <span className="sm:hidden">PDF</span>
-            </Button>
-            <Button variant="outline" onClick={handleExportExcel} className="flex-1 sm:flex-none">
-              <FileText className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Export Excel</span>
-              <span className="sm:hidden">Excel</span>
-            </Button>
-          </div>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">{t('app.reports')}</h1>
+          <p className="text-muted-foreground">
+            Analyze your business performance
+          </p>
         </div>
 
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-lg md:text-xl">Report Date</CardTitle>
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-                <input
-                  type="date"
-                  value={selectedDate.toISOString().split('T')[0]}
-                  onChange={(e) => setSelectedDate(new Date(e.target.value))}
-                  className="px-3 py-2 border border-border rounded-md bg-background text-sm"
-                />
-              </div>
-            </div>
-          </CardHeader>
-        </Card>
+        <Tabs defaultValue="sales" className="space-y-4">
+          <TabsList>
+            <TabsTrigger value="sales">Sales Analysis</TabsTrigger>
+            <TabsTrigger value="inventory">Inventory Health</TabsTrigger>
+          </TabsList>
 
-        {loading ? (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-6">
-              <StatCardSkeleton />
-              <StatCardSkeleton />
-              <StatCardSkeleton />
+          <TabsContent value="sales" className="space-y-4">
+            <div className="flex justify-end">
+              <DatePickerWithRange date={dateRange} setDate={setDateRange} />
             </div>
+
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+              <Card className="col-span-4">
+                <CardHeader>
+                  <CardTitle>Revenue Over Time</CardTitle>
+                </CardHeader>
+                <CardContent className="pl-2">
+                  {salesLoading ? (
+                    <div className="h-[350px] flex items-center justify-center">
+                      <Loader2 className="h-8 w-8 animate-spin" />
+                    </div>
+                  ) : (
+                    <ResponsiveContainer width="100%" height={350}>
+                      <LineChart data={salesData}>
+                        <XAxis
+                          dataKey="date"
+                          stroke="#888888"
+                          fontSize={12}
+                          tickLine={false}
+                          axisLine={false}
+                          tickFormatter={(value) => format(new Date(value), 'MMM dd')}
+                        />
+                        <YAxis
+                          stroke="#888888"
+                          fontSize={12}
+                          tickLine={false}
+                          axisLine={false}
+                          tickFormatter={(value) => `$${value}`}
+                        />
+                        <Tooltip 
+                          labelFormatter={(value) => format(new Date(value), 'MMM dd, yyyy')}
+                          formatter={(value: number) => [`$${value.toFixed(2)}`, 'Revenue']}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="totalRevenue"
+                          stroke="#8884d8"
+                          strokeWidth={2}
+                          activeDot={{ r: 8 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  )}
+                </CardContent>
+              </Card>
+
+              <Card className="col-span-3">
+                <CardHeader>
+                  <CardTitle>Top Selling Products</CardTitle>
+                  <CardDescription>
+                    By quantity sold
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {topProductsLoading ? (
+                    <div className="h-[350px] flex items-center justify-center">
+                      <Loader2 className="h-8 w-8 animate-spin" />
+                    </div>
+                  ) : (
+                    <ResponsiveContainer width="100%" height={350}>
+                      <BarChart data={topProducts} layout="vertical" margin={{ left: 0 }}>
+                        <XAxis type="number" hide />
+                        <YAxis
+                          dataKey="productName"
+                          type="category"
+                          width={100}
+                          fontSize={12}
+                          tickLine={false}
+                          axisLine={false}
+                        />
+                        <Tooltip />
+                        <Bar dataKey="quantitySold" fill="#adfa1d" radius={[0, 4, 4, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="inventory" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg md:text-xl">Top 5 Selling Products</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <AlertTriangle className="h-5 w-5 text-destructive" />
+                  Low Stock Alert
+                </CardTitle>
+                <CardDescription>
+                  Products that are below their minimum stock level
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <TableSkeleton rows={5} />
-              </CardContent>
-            </Card>
-          </>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-6">
-              <Card>
-                <CardContent className="p-4 md:p-6">
-                  <p className="text-sm font-medium text-muted-foreground">Total Sales</p>
-                  <p className="text-2xl md:text-3xl font-bold text-primary mt-2">
-                    ${report?.totalSales.toFixed(2) || '0.00'}
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-4 md:p-6">
-                  <p className="text-sm font-medium text-muted-foreground">Invoices</p>
-                  <p className="text-2xl md:text-3xl font-bold text-foreground mt-2">
-                    {report?.invoiceCount || 0}
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-4 md:p-6">
-                  <p className="text-sm font-medium text-muted-foreground">Avg. Sale Value</p>
-                  <p className="text-2xl md:text-3xl font-bold text-foreground mt-2">
-                    ${report && report.invoiceCount > 0 
-                      ? (report.totalSales / report.invoiceCount).toFixed(2) 
-                      : '0.00'}
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg md:text-xl">Top 5 Selling Products</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {report?.topProducts && report.topProducts.length > 0 ? (
+                {lowStockLoading ? (
+                  <div className="h-[200px] flex items-center justify-center">
+                    <Loader2 className="h-8 w-8 animate-spin" />
+                  </div>
+                ) : (
                   <DataTable
-                    data={report.topProducts.map((p, index) => ({ ...p, id: `top-${index}` }))}
+                    data={lowStock || []}
                     columns={[
+                      { header: 'Product Name', accessor: 'name' },
                       { 
-                        header: '#', 
-                        accessor: (row, idx) => (idx ? idx + 1 : 1)
+                        header: 'Current Stock', 
+                        accessor: (row) => (
+                          <span className="text-destructive font-bold">{row.stock}</span>
+                        )
                       },
-                      { header: 'Product', accessor: 'productName' },
-                      { header: 'Quantity Sold', accessor: 'quantitySold' },
-                      { 
-                        header: 'Revenue', 
-                        accessor: (row) => `$${row.revenue.toFixed(2)}`
-                      },
+                      { header: 'Min. Stock', accessor: 'minimumStock' },
+                      {
+                        header: 'Status',
+                        accessor: () => <Badge variant="destructive">Low Stock</Badge>
+                      }
                     ]}
                   />
-                ) : (
-                  <p className="text-center text-muted-foreground py-8">
-                    No sales data for this date
-                  </p>
                 )}
               </CardContent>
             </Card>
-          </>
-        )}
+          </TabsContent>
+        </Tabs>
       </div>
     </PageTransition>
   );

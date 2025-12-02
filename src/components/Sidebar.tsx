@@ -5,7 +5,11 @@ import {
   ShoppingCart, 
   FileText, 
   BarChart3,
-  Settings
+  Settings,
+  Users,
+  Clock,
+  DollarSign,
+  Briefcase
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
@@ -23,6 +27,10 @@ export function Sidebar({ onClose }: SidebarProps) {
     { name: t('app.sales'), href: '/sales', icon: ShoppingCart },
     { name: t('app.invoices'), href: '/invoices', icon: FileText },
     { name: t('app.reports'), href: '/reports', icon: BarChart3 },
+    { name: 'Employees', href: '/hr/employees', icon: Users },
+    { name: 'Attendance', href: '/hr/attendance', icon: Clock },
+    { name: 'Payroll', href: '/hr/payroll', icon: DollarSign },
+    { name: 'Projects', href: '/projects', icon: Briefcase },
     { name: t('app.settings'), href: '/settings', icon: Settings },
   ];
 

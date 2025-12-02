@@ -1,188 +1,157 @@
-import { useEffect, useState } from 'react';
-import { StatCard } from '@/components/StatCard';
-import { DataTable } from '@/components/DataTable';
+import { useAuthStore } from '@/store/authStore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { DollarSign, FileText, AlertTriangle, TrendingUp } from 'lucide-react';
-import { dashboardAPI } from '@/services/mockDataService';
-import { DashboardStats } from '@/types';
-import { useTranslation } from 'react-i18next';
-import { PageTransition } from '@/components/PageTransition';
-import { StatCardSkeleton, TableSkeleton } from '@/components/LoadingSkeleton';
-import { StaggerContainer, StaggerItem } from '@/components/animations/FadeIn';
+import { Button } from '@/components/ui/button';
+import { PlusCircle, ShoppingCart, Package, FileText, AlertTriangle, Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { dashboardService } from '@/services/dashboardService';
 
 export default function Dashboard() {
-  const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [loading, setLoading] = useState(true);
-  const { t } = useTranslation();
+  const user = useAuthStore((state) => state.user);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    loadStats();
-  }, []);
+  const { data: stats, isLoading } = useQuery({
+    queryKey: ['dashboardStats'],
+    queryFn: dashboardService.getStats,
+  });
 
-  const loadStats = async () => {
-    try {
-      const data = await dashboardAPI.getStats();
-      setStats(data);
-    } catch (error) {
-      console.error('Failed to load dashboard stats:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center p-8">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
-    <PageTransition>
-      <div className="space-y-4 md:space-y-6">
+    <div className="space-y-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t('dashboard.title')}</h1>
-          <p className="text-sm md:text-base text-muted-foreground mt-1">{t('dashboard.subtitle')}</p>
+          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+          <p className="text-muted-foreground">
+            Welcome back, <span className="font-semibold text-foreground">{user?.fullName || user?.email}</span>
+          </p>
         </div>
-
-        {loading ? (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-              <StatCardSkeleton />
-              <StatCardSkeleton />
-              <StatCardSkeleton />
-              <StatCardSkeleton />
-            </div>
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg md:text-xl">{t('dashboard.lowStockProducts')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <TableSkeleton rows={3} />
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg md:text-xl">{t('dashboard.recentSales')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <TableSkeleton rows={3} />
-                </CardContent>
-              </Card>
-            </div>
-          </>
-        ) : (
-          <>
-            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-              <StaggerItem>
-                <StatCard
-                  title={t('dashboard.todaySales')}
-                  value={`$${stats?.todaySales.toFixed(2) || '0.00'}`}
-                  icon={DollarSign}
-                  variant="success"
-                  trend={{ value: '+12.5%', isPositive: true }}
-                />
-              </StaggerItem>
-              <StaggerItem>
-                <StatCard
-                  title={t('dashboard.totalInvoices')}
-                  value={stats?.todayInvoices || 0}
-                  icon={FileText}
-                  variant="default"
-                />
-              </StaggerItem>
-              <StaggerItem>
-                <StatCard
-                  title={t('dashboard.lowStock')}
-                  value={stats?.lowStockProducts.length || 0}
-                  icon={AlertTriangle}
-                  variant="warning"
-                />
-              </StaggerItem>
-              <StaggerItem>
-                <StatCard
-                  title={t('dashboard.revenueTrend')}
-                  value="+23.5%"
-                  icon={TrendingUp}
-                  variant="success"
-                />
-              </StaggerItem>
-            </StaggerContainer>
-
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg md:text-xl">{t('dashboard.lowStockProducts')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {stats?.lowStockProducts && stats.lowStockProducts.length > 0 ? (
-                    <div className="overflow-x-auto -mx-2 sm:mx-0">
-                      <DataTable
-                        data={stats.lowStockProducts}
-                        columns={[
-                          { header: t('products.name'), accessor: 'name' },
-                          { 
-                            header: t('products.stock'), 
-                            accessor: (row) => (
-                              <Badge variant="destructive" className="text-xs">
-                                {row.stock}
-                              </Badge>
-                            )
-                          },
-                          { 
-                            header: 'Min', 
-                            accessor: (row) => <span className="text-xs md:text-sm">{row.minimumStock}</span>
-                          },
-                        ]}
-                      />
-                    </div>
-                  ) : (
-                    <p className="text-sm md:text-base text-muted-foreground text-center py-8">
-                      {t('dashboard.allStocked')}
-                    </p>
-                  )}
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg md:text-xl">{t('dashboard.recentSales')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {stats?.recentSales && stats.recentSales.length > 0 ? (
-                    <div className="overflow-x-auto -mx-2 sm:mx-0">
-                      <DataTable
-                        data={stats.recentSales}
-                        columns={[
-                          { header: 'Invoice', accessor: 'invoiceNumber' },
-                          { 
-                            header: 'Time', 
-                            accessor: (row) => (
-                              <span className="text-xs md:text-sm">
-                                {new Date(row.date).toLocaleTimeString([], { 
-                                  hour: '2-digit', 
-                                  minute: '2-digit' 
-                                })}
-                              </span>
-                            )
-                          },
-                          { 
-                            header: t('sales.total'), 
-                            accessor: (row) => (
-                              <span className="text-xs md:text-sm font-semibold">
-                                ${row.total.toFixed(2)}
-                              </span>
-                            )
-                          },
-                        ]}
-                      />
-                    </div>
-                  ) : (
-                    <p className="text-sm md:text-base text-muted-foreground text-center py-8">
-                      {t('dashboard.noSales')}
-                    </p>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-          </>
-        )}
+        <div className="flex gap-2">
+          <Button onClick={() => navigate('/sales')}>
+            <ShoppingCart className="mr-2 h-4 w-4" />
+            New Sale
+          </Button>
+        </div>
       </div>
-    </PageTransition>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              className="h-4 w-4 text-muted-foreground"
+            >
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">${stats?.totalRevenue.toFixed(2) || '0.00'}</div>
+            <p className="text-xs text-muted-foreground">
+              Lifetime revenue
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Invoices</CardTitle>
+            <FileText className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats?.totalInvoices || 0}</div>
+            <p className="text-xs text-muted-foreground">
+              Total invoices generated
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Products</CardTitle>
+            <Package className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats?.totalProducts || 0}</div>
+            <p className="text-xs text-muted-foreground">
+              Items in inventory
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Low Stock</CardTitle>
+            <AlertTriangle className="h-4 w-4 text-destructive" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-destructive">{stats?.lowStockProducts || 0}</div>
+            <p className="text-xs text-muted-foreground">
+              Products needing reorder
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <Card className="col-span-4">
+          <CardHeader>
+            <CardTitle>Quick Actions</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-4 md:grid-cols-2">
+             <Button variant="outline" className="h-24 flex flex-col items-center justify-center gap-2" onClick={() => navigate('/products')}>
+                <Package className="h-6 w-6" />
+                Manage Products
+             </Button>
+             <Button variant="outline" className="h-24 flex flex-col items-center justify-center gap-2" onClick={() => navigate('/sales')}>
+                <ShoppingCart className="h-6 w-6" />
+                Create Sale
+             </Button>
+             <Button variant="outline" className="h-24 flex flex-col items-center justify-center gap-2" onClick={() => navigate('/invoices')}>
+                <FileText className="h-6 w-6" />
+                View Invoices
+             </Button>
+             <Button variant="outline" className="h-24 flex flex-col items-center justify-center gap-2" onClick={() => navigate('/settings')}>
+                <PlusCircle className="h-6 w-6" />
+                System Settings
+             </Button>
+          </CardContent>
+        </Card>
+        <Card className="col-span-3">
+          <CardHeader>
+            <CardTitle>Recent Sales</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-8">
+              {stats?.recentSales.map((sale, index) => (
+                <div className="flex items-center" key={index}>
+                  <div className="ml-4 space-y-1">
+                    <p className="text-sm font-medium leading-none">
+                      {sale.customerName}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {sale.invoiceNumber} • {new Date(sale.date).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <div className="ml-auto font-medium">+${sale.amount.toFixed(2)}</div>
+                </div>
+              ))}
+              {(!stats?.recentSales || stats.recentSales.length === 0) && (
+                <p className="text-sm text-muted-foreground text-center py-4">No recent sales</p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 }

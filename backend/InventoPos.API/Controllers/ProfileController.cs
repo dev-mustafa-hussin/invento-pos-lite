@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using InventoPos.API.Models;
+using InventoPos.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

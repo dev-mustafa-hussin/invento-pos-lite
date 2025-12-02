@@ -1,51 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { DataTable } from '@/components/DataTable';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Search, Calendar } from 'lucide-react';
-import { salesAPI } from '@/services/mockDataService';
-import { SaleInvoice } from '@/types';
+import { Search, Calendar, Loader2 } from 'lucide-react';
+import { salesService } from '@/services/salesService';
 import { useTranslation } from 'react-i18next';
 import { PageTransition } from '@/components/PageTransition';
 import { TableSkeleton } from '@/components/LoadingSkeleton';
-
-// TODO: Replace salesAPI.getAll with real GET /api/sales endpoint
+import { useQuery } from '@tanstack/react-query';
 
 export default function Invoices() {
-  const [invoices, setInvoices] = useState<SaleInvoice[]>([]);
-  const [filteredInvoices, setFilteredInvoices] = useState<SaleInvoice[]>([]);
-  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const { t } = useTranslation();
 
-  useEffect(() => {
-    loadInvoices();
-  }, []);
-
-  useEffect(() => {
-    if (searchQuery) {
-      const filtered = invoices.filter(i =>
-        i.invoiceNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        i.customerName?.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredInvoices(filtered);
-    } else {
-      setFilteredInvoices(invoices);
-    }
-  }, [searchQuery, invoices]);
-
-  const loadInvoices = async () => {
-    try {
-      const data = await salesAPI.getAll();
-      setInvoices(data);
-      setFilteredInvoices(data);
-    } catch (error) {
-      console.error('Failed to load invoices:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { data: invoices = [], isLoading } = useQuery({
+    queryKey: ['invoices', searchQuery],
+    queryFn: () => salesService.getAll(1, 50, searchQuery),
+  });
 
   return (
     <PageTransition>
@@ -73,11 +45,11 @@ export default function Invoices() {
           </div>
         </div>
 
-        {loading ? (
+        {isLoading ? (
           <TableSkeleton rows={10} />
         ) : (
           <DataTable
-            data={filteredInvoices}
+            data={invoices}
             columns={[
               { header: 'Invoice #', accessor: 'invoiceNumber' },
               { 
@@ -85,18 +57,14 @@ export default function Invoices() {
                 accessor: (row) => new Date(row.date).toLocaleDateString()
               },
               { 
-                header: 'Items', 
-                accessor: (row) => row.items.length
+                header: 'Total Amount', 
+                accessor: (row) => `$${row.totalAmount.toFixed(2)}`
               },
               { 
-                header: t('sales.total'), 
-                accessor: (row) => `$${row.total.toFixed(2)}`
-              },
-              { 
-                header: 'Payment', 
+                header: 'Status', 
                 accessor: (row) => (
-                  <Badge variant="outline">
-                    {row.paymentMethod}
+                  <Badge variant={row.status === 'completed' ? 'default' : 'secondary'}>
+                    {row.status}
                   </Badge>
                 )
               },

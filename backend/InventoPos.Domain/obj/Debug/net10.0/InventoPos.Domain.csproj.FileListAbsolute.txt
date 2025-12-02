@@ -1,0 +1,13 @@
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Domain\obj\Debug\net10.0\InventoPos.Domain.GeneratedMSBuildEditorConfig.editorconfig
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Domain\obj\Debug\net10.0\InventoPos.Domain.AssemblyInfoInputs.cache
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Domain\obj\Debug\net10.0\InventoPos.Domain.AssemblyInfo.cs
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Domain\obj\Debug\net10.0\InventoPos.Domain.csproj.CoreCompileInputs.cache
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Domain\obj\Debug\net10.0\InventoPos.Domain.sourcelink.json
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Domain\bin\Debug\net10.0\InventoPos.Domain.deps.json
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Domain\bin\Debug\net10.0\InventoPos.Domain.dll
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Domain\bin\Debug\net10.0\InventoPos.Domain.pdb
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Domain\obj\Debug\net10.0\InventoPos.Domain.csproj.AssemblyReference.cache
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Domain\obj\Debug\net10.0\InventoPos.Domain.dll
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Domain\obj\Debug\net10.0\refint\InventoPos.Domain.dll
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Domain\obj\Debug\net10.0\InventoPos.Domain.pdb
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Domain\obj\Debug\net10.0\ref\InventoPos.Domain.dll

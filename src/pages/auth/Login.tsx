@@ -1,183 +1,126 @@
 import { useState } from 'react';
-import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
-import { PageTransition } from '@/components/PageTransition';
-import { FadeIn } from '@/components/animations/FadeIn';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { useNavigate } from 'react-router-dom';
+import { Loader2, Lock, Mail } from 'lucide-react';
+import api from '../../api/axios';
+import { useAuthStore } from '../../store/authStore';
+
+const loginSchema = z.object({
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function Login() {
-  console.log('Login component rendered');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const login = useAuthStore((state) => state.login);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+  });
 
+  const onSubmit = async (data: LoginFormValues) => {
+    setIsLoading(true);
+    setError(null);
     try {
-      console.log('Starting login request...');
-      // Call the login endpoint (ASP.NET Core Identity default is /login)
-      // Note: We use ?useCookies=true if we want cookies, or default for Bearer tokens.
-      // Let's assume Bearer tokens for now as it's standard for SPAs with this setup.
-      const apiUrl = import.meta.env.VITE_API_URL.replace(/\/api$/, '');
-      console.log(`Login URL: ${apiUrl}/login`);
+      const response = await api.post('/auth/login', data);
+      const { token, refreshToken, ...user } = response.data;
       
-      const response = await axios.post(`${apiUrl}/login`, {
-        email,
-        password,
-      });
-
-      console.log('Login response received:', response.status);
-
-      // Store the token
-      const { accessToken, refreshToken } = response.data;
-      console.log('Tokens received:', { accessToken: !!accessToken, refreshToken: !!refreshToken });
+      localStorage.setItem('refreshToken', refreshToken);
       
-      localStorage.setItem('accessToken', accessToken);
-      if (refreshToken) {
-        localStorage.setItem('refreshToken', refreshToken);
-      }
-
-      console.log('Navigating to dashboard...');
-      // Navigate to dashboard
+      login(user, token);
       navigate('/');
-    } catch (error) {
-      console.error('Login failed:', error);
-      if (axios.isAxiosError(error)) {
-        console.error('Response data:', error.response?.data);
-        console.error('Response status:', error.response?.status);
-      }
-      alert(i18n.language === 'ar' ? 'فشل تسجيل الدخول. يرجى التحقق من بياناتك.' : 'Login failed. Please check your credentials.');
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <PageTransition>
-        <FadeIn>
-          <Card className="w-full max-w-md">
-            <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl md:text-3xl font-bold text-center">
-                {t('user.login')}
-              </CardTitle>
-              <CardDescription className="text-center">
-                {i18n.language === 'ar' 
-                  ? 'أدخل بياناتك للوصول إلى حسابك' 
-                  : 'Enter your credentials to access your account'}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">
-                    {i18n.language === 'ar' ? 'البريد الإلكتروني' : 'Email'}
-                  </Label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder={i18n.language === 'ar' ? 'أدخل بريدك الإلكتروني' : 'Enter your email'}
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
+      <div className="max-w-md w-full space-y-8 bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg">
+        <div className="text-center">
+          <h2 className="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">
+            Welcome Back
+          </h2>
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            Sign in to your account
+          </p>
+        </div>
+        
+        {error && (
+          <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-md text-sm text-center">
+            {error}
+          </div>
+        )}
 
-                <div className="space-y-2">
-                  <Label htmlFor="password">
-                    {i18n.language === 'ar' ? 'كلمة المرور' : 'Password'}
-                  </Label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="password"
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder={i18n.language === 'ar' ? 'أدخل كلمة المرور' : 'Enter your password'}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="pl-10 pr-10"
-                      required
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                    >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      id="remember"
-                      className="rounded border-border"
-                    />
-                    <label htmlFor="remember" className="text-sm text-muted-foreground">
-                      {i18n.language === 'ar' ? 'تذكرني' : 'Remember me'}
-                    </label>
-                  </div>
-                  <Link 
-                    to="/forgot-password" 
-                    className="text-sm text-primary hover:underline"
-                  >
-                    {t('user.forgotPassword')}
-                  </Link>
-                </div>
-
-                <Button 
-                  type="submit" 
-                  className="w-full" 
-                  size="lg"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <span>{i18n.language === 'ar' ? 'جاري تسجيل الدخول...' : 'Signing in...'}</span>
-                  ) : (
-                    <span>{t('user.login')}</span>
-                  )}
-                </Button>
-              </form>
-
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="email" className="sr-only">Email address</label>
               <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-border" />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Mail className="h-5 w-5 text-gray-400" />
                 </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
-                    {i18n.language === 'ar' ? 'أو' : 'or'}
-                  </span>
-                </div>
+                <input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  className={`appearance-none relative block w-full px-3 py-2 pl-10 border ${errors.email ? 'border-red-500' : 'border-gray-300'} placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white`}
+                  placeholder="Email address"
+                  {...register('email')}
+                />
               </div>
+              {errors.email && (
+                <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>
+              )}
+            </div>
+            <div>
+              <label htmlFor="password" className="sr-only">Password</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="password"
+                  type="password"
+                  autoComplete="current-password"
+                  className={`appearance-none relative block w-full px-3 py-2 pl-10 border ${errors.password ? 'border-red-500' : 'border-gray-300'} placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white`}
+                  placeholder="Password"
+                  {...register('password')}
+                />
+              </div>
+              {errors.password && (
+                <p className="mt-1 text-xs text-red-500">{errors.password.message}</p>
+              )}
+            </div>
+          </div>
 
-              <div className="text-center text-sm">
-                <span className="text-muted-foreground">
-                  {i18n.language === 'ar' ? 'ليس لديك حساب؟' : "Don't have an account?"}{' '}
-                </span>
-                <Link to="/register" className="text-primary hover:underline font-medium">
-                  {t('user.register')}
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
-        </FadeIn>
-      </PageTransition>
+          <div>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? (
+                <Loader2 className="animate-spin h-5 w-5" />
+              ) : (
+                'Sign in'
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

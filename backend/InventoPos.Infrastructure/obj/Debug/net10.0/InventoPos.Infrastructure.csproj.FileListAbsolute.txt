@@ -1,0 +1,6 @@
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Infrastructure\obj\Debug\net10.0\InventoPos.Infrastructure.csproj.AssemblyReference.cache
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Infrastructure\obj\Debug\net10.0\InventoPos.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Infrastructure\obj\Debug\net10.0\InventoPos.Infrastructure.AssemblyInfoInputs.cache
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Infrastructure\obj\Debug\net10.0\InventoPos.Infrastructure.AssemblyInfo.cs
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Infrastructure\obj\Debug\net10.0\InventoPos.Infrastructure.csproj.CoreCompileInputs.cache
+K:\تدريب اولى على مواقع للسيرة الذاتية\invento-pos-lite\backend\InventoPos.Infrastructure\obj\Debug\net10.0\InventoPos.Infrastructure.sourcelink.json

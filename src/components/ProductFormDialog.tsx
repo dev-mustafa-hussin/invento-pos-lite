@@ -16,11 +16,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Product } from '@/types';
-import { productsAPI } from '@/services/mockDataService';
+import { Product } from '@/services/productService';
+import { productService } from '@/services/productService';
 import { useToast } from '@/hooks/use-toast';
-
-// TODO: Add form validation (Zod or similar) when adding dependencies for production-quality validation
 
 interface ProductFormDialogProps {
   open: boolean;
@@ -29,44 +27,43 @@ interface ProductFormDialogProps {
   onSuccess: () => void;
 }
 
-const categories = ['Electronics', 'Accessories', 'Office Supplies', 'Furniture', 'Other'];
+// Mock categories for now, ideally fetch from API
+const categories = [
+  { id: 1, name: 'Electronics' },
+  { id: 2, name: 'Accessories' },
+  { id: 3, name: 'Office Supplies' },
+];
 
 export function ProductFormDialog({ open, onOpenChange, product, onSuccess }: ProductFormDialogProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
-    sku: '',
-    category: 'Electronics',
-    unitPrice: '',
-    costPrice: '',
+    barcode: '',
+    categoryId: '1',
+    price: '',
     stock: '',
-    minimumStock: '',
-    status: 'active',
+    description: '',
   });
 
   useEffect(() => {
     if (product) {
       setFormData({
         name: product.name,
-        sku: product.sku,
-        category: product.category,
-        unitPrice: product.unitPrice.toString(),
-        costPrice: product.costPrice.toString(),
+        barcode: product.barcode || '',
+        categoryId: product.categoryId?.toString() || '1',
+        price: product.price.toString(),
         stock: product.stock.toString(),
-        minimumStock: product.minimumStock.toString(),
-        status: product.status,
+        description: product.description || '',
       });
     } else {
       setFormData({
         name: '',
-        sku: '',
-        category: 'Electronics',
-        unitPrice: '',
-        costPrice: '',
+        barcode: '',
+        categoryId: '1',
+        price: '',
         stock: '',
-        minimumStock: '',
-        status: 'active',
+        description: '',
       });
     }
   }, [product, open]);
@@ -76,33 +73,29 @@ export function ProductFormDialog({ open, onOpenChange, product, onSuccess }: Pr
     setLoading(true);
 
     try {
-      // TODO: Add runtime validation with Zod/similar when adding dependencies
-      const data: Omit<Product, 'id' | 'createdAt' | 'updatedAt'> = {
+      const data = {
         name: formData.name,
-        sku: formData.sku,
-        category: formData.category,
-        unitPrice: parseFloat(formData.unitPrice),
-        costPrice: parseFloat(formData.costPrice),
+        barcode: formData.barcode,
+        categoryId: parseInt(formData.categoryId),
+        price: parseFloat(formData.price),
         stock: parseInt(formData.stock),
-        minimumStock: parseInt(formData.minimumStock),
-        status: formData.status as 'active' | 'inactive',
+        description: formData.description,
       };
 
       if (product) {
-        await productsAPI.update(product.id, data);
+        // Update not implemented in backend yet
         toast({
-          title: 'Success',
-          description: 'Product updated successfully',
+          title: 'Info',
+          description: 'Update feature coming soon',
         });
       } else {
-        await productsAPI.create(data);
+        await productService.create(data);
         toast({
           title: 'Success',
           description: 'Product created successfully',
         });
+        onSuccess();
       }
-
-      onSuccess();
     } catch (error) {
       console.error(error);
       toast({
@@ -135,28 +128,27 @@ export function ProductFormDialog({ open, onOpenChange, product, onSuccess }: Pr
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="sku">SKU *</Label>
+              <Label htmlFor="barcode">Barcode/SKU</Label>
               <Input
-                id="sku"
-                value={formData.sku}
-                onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
-                required
+                id="barcode"
+                value={formData.barcode}
+                onChange={(e) => setFormData({ ...formData, barcode: e.target.value })}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="category">Category *</Label>
+              <Label htmlFor="category">Category</Label>
               <Select
-                value={formData.category}
-                onValueChange={(value) => setFormData({ ...formData, category: value })}
+                value={formData.categoryId}
+                onValueChange={(value) => setFormData({ ...formData, categoryId: value })}
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((cat) => (
-                    <SelectItem key={cat} value={cat}>
-                      {cat}
+                    <SelectItem key={cat.id} value={cat.id.toString()}>
+                      {cat.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -164,33 +156,20 @@ export function ProductFormDialog({ open, onOpenChange, product, onSuccess }: Pr
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="unitPrice">Price *</Label>
+              <Label htmlFor="price">Price *</Label>
               <Input
-                id="unitPrice"
+                id="price"
                 type="number"
                 step="0.01"
                 min="0"
-                value={formData.unitPrice}
-                onChange={(e) => setFormData({ ...formData, unitPrice: e.target.value })}
+                value={formData.price}
+                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="costPrice">Cost Price *</Label>
-              <Input
-                id="costPrice"
-                type="number"
-                step="0.01"
-                min="0"
-                value={formData.costPrice}
-                onChange={(e) => setFormData({ ...formData, costPrice: e.target.value })}
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="stock">Stock Quantity *</Label>
+              <Label htmlFor="stock">Initial Stock *</Label>
               <Input
                 id="stock"
                 type="number"
@@ -198,37 +177,17 @@ export function ProductFormDialog({ open, onOpenChange, product, onSuccess }: Pr
                 value={formData.stock}
                 onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
                 required
+                disabled={!!product} // Disable stock edit on update, use Adjust Stock instead
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="minimumStock">Minimum Stock *</Label>
+            <div className="col-span-2 space-y-2">
+              <Label htmlFor="description">Description</Label>
               <Input
-                id="minimumStock"
-                type="number"
-                min="0"
-                value={formData.minimumStock}
-                onChange={(e) => setFormData({ ...formData, minimumStock: e.target.value })}
-                required
+                id="description"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="status">Status *</Label>
-              <Select
-                value={formData.status}
-                onValueChange={(value) => 
-                  setFormData({ ...formData, status: value })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
           </div>
 
