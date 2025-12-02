@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supplierService, CreatePurchaseOrderRequest } from '../../services/supplierService';
-import { productService } from '../../services/productService';
+import { productService, Product } from '../../services/productService';
 import { warehouseService } from '../../services/warehouseService';
-import { Plus, Search, FileText, Check } from 'lucide-react';
+import { Plus, Check } from 'lucide-react';
 
 export default function PurchaseOrders() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
   const queryClient = useQueryClient();
 
   const { data: orders, isLoading } = useQuery({
@@ -22,7 +21,7 @@ export default function PurchaseOrders() {
 
   const { data: products } = useQuery({
     queryKey: ['products'],
-    queryFn: productService.getAll,
+    queryFn: () => productService.getAll(),
   });
 
   const { data: warehouses } = useQuery({
@@ -49,15 +48,12 @@ export default function PurchaseOrders() {
     },
   });
 
-  // Form state for new order
   const [selectedSupplier, setSelectedSupplier] = useState('');
   const [orderItems, setOrderItems] = useState<{ productId: number; quantity: number; unitPrice: number }[]>([]);
   const [currentProduct, setCurrentProduct] = useState('');
   const [currentQuantity, setCurrentQuantity] = useState(1);
-
   const [currentPrice, setCurrentPrice] = useState(0);
 
-  // Receive state
   const [isReceiveOpen, setIsReceiveOpen] = useState(false);
   const [selectedOrderToReceive, setSelectedOrderToReceive] = useState<number | null>(null);
   const [selectedWarehouse, setSelectedWarehouse] = useState('');
@@ -79,13 +75,13 @@ export default function PurchaseOrders() {
 
   const handleAddItem = () => {
     if (!currentProduct || currentQuantity <= 0) return;
-    const product = products?.find(p => p.id === parseInt(currentProduct));
+    const product = products?.find((p: Product) => p.id === parseInt(currentProduct));
     if (!product) return;
 
     setOrderItems([...orderItems, {
       productId: parseInt(currentProduct),
       quantity: currentQuantity,
-      unitPrice: currentPrice || product.price // Use entered price or product default
+      unitPrice: currentPrice || product.price
     }]);
     setCurrentProduct('');
     setCurrentQuantity(1);
@@ -201,7 +197,7 @@ export default function PurchaseOrders() {
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm border p-2"
                     >
                       <option value="">Select Product</option>
-                      {products?.map(p => (
+                      {products?.map((p: Product) => (
                         <option key={p.id} value={p.id}>{p.name}</option>
                       ))}
                     </select>
@@ -242,7 +238,7 @@ export default function PurchaseOrders() {
                   <h4 className="text-sm font-medium text-gray-700">Order Items</h4>
                   <ul className="mt-2 divide-y divide-gray-200">
                     {orderItems.map((item, index) => {
-                      const product = products?.find(p => p.id === item.productId);
+                      const product = products?.find((p: Product) => p.id === item.productId);
                       return (
                         <li key={index} className="py-2 flex justify-between text-sm">
                           <span>{product?.name} x {item.quantity}</span>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { warehouseService } from '../../services/warehouseService';
 import { stockService } from '../../services/stockService';
-import { productService } from '../../services/productService';
+import { productService, Product } from '../../services/productService';
 
 interface StockAdjustmentDialogProps {
   isOpen: boolean;
@@ -23,7 +23,7 @@ export default function StockAdjustmentDialog({ isOpen, onClose }: StockAdjustme
 
   const { data: products } = useQuery({
     queryKey: ['products'],
-    queryFn: productService.getAll,
+    queryFn: () => productService.getAll(),
   });
 
   const adjustMutation = useMutation({
@@ -66,7 +66,7 @@ export default function StockAdjustmentDialog({ isOpen, onClose }: StockAdjustme
               required
             >
               <option value="">Select Product</option>
-              {products?.map(p => (
+              {products?.map((p: Product) => (
                 <option key={p.id} value={p.id}>{p.name}</option>
               ))}
             </select>

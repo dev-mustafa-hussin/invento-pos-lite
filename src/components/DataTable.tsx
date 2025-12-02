@@ -11,7 +11,7 @@ interface DataTableProps<T> {
   columns: Column<T>[];
 }
 
-export function DataTable<T extends { id?: string | number }>({ 
+export function DataTable<T>({ 
   data, 
   columns 
 }: DataTableProps<T>) {
@@ -20,6 +20,13 @@ export function DataTable<T extends { id?: string | number }>({
       return column.accessor(row, index);
     }
     return row[column.accessor as keyof T] as React.ReactNode;
+  };
+
+  const getRowKey = (row: T, index: number): string | number => {
+    const record = row as Record<string, unknown>;
+    if (record.id !== undefined) return record.id as string | number;
+    if (record.productId !== undefined) return record.productId as string | number;
+    return index;
   };
 
   return (
@@ -43,7 +50,7 @@ export function DataTable<T extends { id?: string | number }>({
         <tbody>
           {data.map((row, rowIndex) => (
             <tr
-              key={row.id || rowIndex}
+              key={getRowKey(row, rowIndex)}
               className="border-b border-border hover:bg-muted/30 transition-colors"
             >
               {columns.map((column, colIndex) => (

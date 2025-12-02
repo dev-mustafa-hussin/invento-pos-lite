@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { warehouseService } from '../../services/warehouseService';
 import { stockService } from '../../services/stockService';
-import { productService } from '../../services/productService';
+import { productService, Product } from '../../services/productService';
 
 interface StockTransferDialogProps {
   isOpen: boolean;
@@ -24,15 +24,14 @@ export default function StockTransferDialog({ isOpen, onClose }: StockTransferDi
 
   const { data: products } = useQuery({
     queryKey: ['products'],
-    queryFn: productService.getAll,
+    queryFn: () => productService.getAll(),
   });
 
   const transferMutation = useMutation({
     mutationFn: stockService.transfer,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['products'] }); // Refresh stock levels
+      queryClient.invalidateQueries({ queryKey: ['products'] });
       onClose();
-      // Reset form
       setProductId('');
       setFromWarehouseId('');
       setToWarehouseId('');
@@ -70,7 +69,7 @@ export default function StockTransferDialog({ isOpen, onClose }: StockTransferDi
               required
             >
               <option value="">Select Product</option>
-              {products?.map(p => (
+              {products?.map((p: Product) => (
                 <option key={p.id} value={p.id}>{p.name}</option>
               ))}
             </select>

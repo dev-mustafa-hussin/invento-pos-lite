@@ -1,23 +1,9 @@
-import { useEffect, useState } from 'react';
-import { DataTable } from '@/components/DataTable';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Plus, Search, Edit, Trash2 } from 'lucide-react';
-import { productsAPI } from '@/services/mockDataService';
-import { Product } from '@/types';
-import { ProductFormDialog } from '@/components/ProductFormDialog';
-import { useToast } from '@/hooks/use-toast';
-import { useTranslation } from 'react-i18next';
-import { PageTransition } from '@/components/PageTransition';
-import { TableSkeleton } from '@/components/LoadingSkeleton';
-
 import { useState } from 'react';
 import { DataTable } from '@/components/DataTable';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Search, Edit, Trash2, Loader2 } from 'lucide-react';
+import { Plus, Search, Edit, Loader2 } from 'lucide-react';
 import { productService, Product } from '@/services/productService';
 import { ProductFormDialog } from '@/components/ProductFormDialog';
 import { useToast } from '@/hooks/use-toast';
@@ -35,7 +21,7 @@ export default function Products() {
 
   const { data: products = [], isLoading, refetch } = useQuery({
     queryKey: ['products'],
-    queryFn: () => productService.getAll(1, 100), // Fetching 100 for now, implement server-side pagination later if needed
+    queryFn: () => productService.getAll(1, 100),
   });
 
   const filteredProducts = products.filter(p =>
@@ -89,7 +75,7 @@ export default function Products() {
                 columns={[
                   { 
                     header: t('products.name'), 
-                    accessor: (row) => (
+                    accessor: (row: Product) => (
                       <div className="min-w-[120px]">
                         <p className="font-medium text-sm md:text-base">{row.name}</p>
                         <p className="text-xs text-muted-foreground md:hidden">{row.barcode}</p>
@@ -98,17 +84,15 @@ export default function Products() {
                   },
                   { 
                     header: t('products.sku'), 
-                    accessor: 'barcode',
-                    className: 'hidden md:table-cell'
+                    accessor: (row: Product) => row.barcode || '-',
                   },
                   { 
                     header: t('products.category'), 
-                    accessor: (row) => row.category?.name || '-',
-                    className: 'hidden lg:table-cell'
+                    accessor: (row: Product) => row.category?.name || '-',
                   },
                   { 
                     header: t('products.price'), 
-                    accessor: (row) => (
+                    accessor: (row: Product) => (
                       <span className="text-sm md:text-base font-semibold">
                         ${row.price.toFixed(2)}
                       </span>
@@ -116,7 +100,7 @@ export default function Products() {
                   },
                   { 
                     header: t('products.stock'), 
-                    accessor: (row) => (
+                    accessor: (row: Product) => (
                       <Badge 
                         variant={row.stock <= 5 ? 'destructive' : 'default'}
                         className="text-xs"
@@ -127,7 +111,7 @@ export default function Products() {
                   },
                   { 
                     header: t('products.actions'), 
-                    accessor: (row) => (
+                    accessor: (row: Product) => (
                       <div className="flex gap-1 md:gap-2">
                         <Button
                           variant="ghost"

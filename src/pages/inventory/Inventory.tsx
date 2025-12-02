@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { productService } from '../../services/productService';
+import { productService, Product } from '../../services/productService';
 import { ArrowRightLeft, AlertTriangle, Package } from 'lucide-react';
 import StockTransferDialog from './StockTransferDialog';
 import StockAdjustmentDialog from './StockAdjustmentDialog';
@@ -11,7 +11,7 @@ export default function Inventory() {
 
   const { data: products, isLoading } = useQuery({
     queryKey: ['products'],
-    queryFn: productService.getAll,
+    queryFn: () => productService.getAll(),
   });
 
   if (isLoading) return <div>Loading...</div>;
@@ -55,7 +55,7 @@ export default function Inventory() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {products?.map((product) => (
+            {products?.map((product: Product) => (
               <tr key={product.id}>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
@@ -64,17 +64,17 @@ export default function Inventory() {
                     </div>
                     <div className="ml-4">
                       <div className="text-sm font-medium text-gray-900">{product.name}</div>
-                      <div className="text-sm text-gray-500">{product.categoryName}</div>
+                      <div className="text-sm text-gray-500">{product.category?.name || '-'}</div>
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.sku}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.barcode || '-'}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                    product.stockQuantity > 10 ? 'bg-green-100 text-green-800' : 
-                    product.stockQuantity > 0 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
+                    product.stock > 10 ? 'bg-green-100 text-green-800' : 
+                    product.stock > 0 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
                   }`}>
-                    {product.stockQuantity}
+                    {product.stock}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${product.price.toFixed(2)}</td>
