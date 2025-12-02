@@ -5,6 +5,7 @@ using InventoPos.Application.Purchases.Commands.CreatePurchaseOrder;
 using InventoPos.Application.Purchases.Commands.CreateSupplier;
 using InventoPos.Application.Purchases.Queries.GetPurchaseOrders;
 using InventoPos.Application.Purchases.Queries.GetSuppliers;
+using InventoPos.Application.Purchases.Commands.ReceivePurchaseOrder;
 
 namespace InventoPos.API.Controllers
 {
@@ -42,6 +43,17 @@ namespace InventoPos.API.Controllers
         public async Task<ActionResult<int>> CreatePurchaseOrder(CreatePurchaseOrderCommand command)
         {
             return await _mediator.Send(command);
+        }
+
+        [HttpPost("orders/{id}/receive")]
+        public async Task<IActionResult> ReceivePurchaseOrder(int id, [FromBody] ReceivePurchaseOrderCommand command)
+        {
+            if (id != command.OrderId)
+            {
+                return BadRequest();
+            }
+            await _mediator.Send(command);
+            return NoContent();
         }
     }
 }

@@ -60,4 +60,8 @@ export const supplierService = {
     const response = await api.post<number>('/purchases/orders', data);
     return response.data;
   },
+
+  receiveOrder: async (orderId: number, warehouseId: number) => {
+    await api.post(`/purchases/orders/${orderId}/receive`, { orderId, warehouseId });
+  },
 };

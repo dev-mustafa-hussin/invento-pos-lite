@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supplierService, CreatePurchaseOrderRequest } from '../../services/supplierService';
 import { productService } from '../../services/productService';
-import { Plus, Search, FileText } from 'lucide-react';
+import { warehouseService } from '../../services/warehouseService';
+import { Plus, Search, FileText, Check } from 'lucide-react';
 
 export default function PurchaseOrders() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -24,6 +25,11 @@ export default function PurchaseOrders() {
     queryFn: productService.getAll,
   });
 
+  const { data: warehouses } = useQuery({
+    queryKey: ['warehouses'],
+    queryFn: warehouseService.getAll,
+  });
+
   const createMutation = useMutation({
     mutationFn: supplierService.createOrder,
     onSuccess: () => {
@@ -32,12 +38,44 @@ export default function PurchaseOrders() {
     },
   });
 
+  const receiveMutation = useMutation({
+    mutationFn: (data: { orderId: number; warehouseId: number }) =>
+      supplierService.receiveOrder(data.orderId, data.warehouseId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['purchaseOrders'] });
+      setIsReceiveOpen(false);
+      setSelectedOrderToReceive(null);
+      setSelectedWarehouse('');
+    },
+  });
+
   // Form state for new order
   const [selectedSupplier, setSelectedSupplier] = useState('');
   const [orderItems, setOrderItems] = useState<{ productId: number; quantity: number; unitPrice: number }[]>([]);
   const [currentProduct, setCurrentProduct] = useState('');
   const [currentQuantity, setCurrentQuantity] = useState(1);
+
   const [currentPrice, setCurrentPrice] = useState(0);
+
+  // Receive state
+  const [isReceiveOpen, setIsReceiveOpen] = useState(false);
+  const [selectedOrderToReceive, setSelectedOrderToReceive] = useState<number | null>(null);
+  const [selectedWarehouse, setSelectedWarehouse] = useState('');
+
+  const handleReceiveClick = (orderId: number) => {
+    setSelectedOrderToReceive(orderId);
+    setIsReceiveOpen(true);
+  };
+
+  const handleConfirmReceive = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (selectedOrderToReceive && selectedWarehouse) {
+      receiveMutation.mutate({
+        orderId: selectedOrderToReceive,
+        warehouseId: parseInt(selectedWarehouse),
+      });
+    }
+  };
 
   const handleAddItem = () => {
     if (!currentProduct || currentQuantity <= 0) return;
@@ -95,6 +133,7 @@ export default function PurchaseOrders() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -112,6 +151,18 @@ export default function PurchaseOrders() {
                   }`}>
                     {order.status === 0 ? 'Pending' : order.status === 1 ? 'Received' : 'Cancelled'}
                   </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {order.status === 0 && (
+                    <button
+                      onClick={() => handleReceiveClick(order.id)}
+                      className="text-indigo-600 hover:text-indigo-900 flex items-center"
+                      title="Receive Order"
+                    >
+                      <Check className="h-5 w-5 mr-1" />
+                      Receive
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
@@ -219,6 +270,47 @@ export default function PurchaseOrders() {
                   className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
                 >
                   Create Order
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {isReceiveOpen && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-md w-full p-6">
+            <h2 className="text-xl font-bold mb-4">Receive Order #{selectedOrderToReceive}</h2>
+            <form onSubmit={handleConfirmReceive} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Select Warehouse</label>
+                <select
+                  value={selectedWarehouse}
+                  onChange={(e) => setSelectedWarehouse(e.target.value)}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2"
+                  required
+                >
+                  <option value="">Select Warehouse</option>
+                  {warehouses?.map(w => (
+                    <option key={w.id} value={w.id}>{w.name}</option>
+                  ))}
+                </select>
+                <p className="mt-1 text-sm text-gray-500">Stock will be added to this warehouse.</p>
+              </div>
+
+              <div className="flex justify-end space-x-3 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setIsReceiveOpen(false)}
+                  className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700"
+                >
+                  Confirm Receive
                 </button>
               </div>
             </form>
