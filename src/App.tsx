@@ -17,6 +17,8 @@ import Payroll from "./pages/hr/Payroll";
 import Projects from "./pages/projects/Projects";
 import ProjectDetails from "./pages/projects/ProjectDetails";
 import Settings from "./pages/Settings";
+import Suppliers from "./pages/purchases/Suppliers";
+import PurchaseOrders from "./pages/purchases/PurchaseOrders";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -54,6 +56,8 @@ const App = () => (
                 <Route path="/projects/:id" element={<ProjectDetails />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/suppliers" element={<Suppliers />} />
+                <Route path="/purchase-orders" element={<PurchaseOrders />} />
               </Route>
             </Route>
             

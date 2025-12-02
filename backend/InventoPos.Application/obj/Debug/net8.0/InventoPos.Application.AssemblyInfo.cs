@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("InventoPos.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6791a8478ab59f8a2cf7cdac40af872d32473ab3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2ef969ecf11771d2d431fc7e5774fb08d356300e")]
 [assembly: System.Reflection.AssemblyProductAttribute("InventoPos.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("InventoPos.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

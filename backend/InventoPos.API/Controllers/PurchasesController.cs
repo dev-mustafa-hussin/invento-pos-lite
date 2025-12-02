@@ -1,35 +1,47 @@
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using InventoPos.Application.Purchases.Commands.CreatePurchaseOrder;
 using InventoPos.Application.Purchases.Commands.CreateSupplier;
 using InventoPos.Application.Purchases.Queries.GetPurchaseOrders;
 using InventoPos.Application.Purchases.Queries.GetSuppliers;
-using Microsoft.AspNetCore.Mvc;
 
 namespace InventoPos.API.Controllers
 {
-    public class PurchasesController : ApiControllerBase
+    [Route("api/[controller]")]
+    [ApiController]
+    [Authorize]
+    public class PurchasesController : ControllerBase
     {
+        private readonly IMediator _mediator;
+
+        public PurchasesController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         [HttpGet("suppliers")]
         public async Task<ActionResult<List<SupplierDto>>> GetSuppliers()
         {
-            return await Mediator.Send(new GetSuppliersQuery());
+            return await _mediator.Send(new GetSuppliersQuery());
         }
 
         [HttpPost("suppliers")]
         public async Task<ActionResult<int>> CreateSupplier(CreateSupplierCommand command)
         {
-            return await Mediator.Send(command);
+            return await _mediator.Send(command);
         }
 
         [HttpGet("orders")]
         public async Task<ActionResult<List<PurchaseOrderDto>>> GetPurchaseOrders()
         {
-            return await Mediator.Send(new GetPurchaseOrdersQuery());
+            return await _mediator.Send(new GetPurchaseOrdersQuery());
         }
 
         [HttpPost("orders")]
         public async Task<ActionResult<int>> CreatePurchaseOrder(CreatePurchaseOrderCommand command)
         {
-            return await Mediator.Send(command);
+            return await _mediator.Send(command);
         }
     }
 }

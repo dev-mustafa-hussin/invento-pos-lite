@@ -9,7 +9,9 @@ import {
   Users,
   Clock,
   DollarSign,
-  Briefcase
+  Briefcase,
+  Truck,
+  ShoppingBag
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
@@ -31,6 +33,8 @@ export function Sidebar({ onClose }: SidebarProps) {
     { name: 'Attendance', href: '/hr/attendance', icon: Clock },
     { name: 'Payroll', href: '/hr/payroll', icon: DollarSign },
     { name: 'Projects', href: '/projects', icon: Briefcase },
+    { name: 'Suppliers', href: '/suppliers', icon: Truck },
+    { name: 'Purchases', href: '/purchase-orders', icon: ShoppingBag },
     { name: t('app.settings'), href: '/settings', icon: Settings },
   ];
 
