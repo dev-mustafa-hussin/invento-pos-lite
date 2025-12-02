@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { reportsService } from '@/services/reportsService';
+import { reportsService, LowStockItem } from '@/services/reportsService';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DatePickerWithRange } from '@/components/ui/date-range-picker';
@@ -11,7 +11,6 @@ import {
   Bar,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   ResponsiveContainer,
   LineChart,
@@ -170,14 +169,14 @@ export default function Reports() {
                   <DataTable
                     data={lowStock || []}
                     columns={[
-                      { header: 'Product Name', accessor: 'name' },
+                      { header: 'Product Name', accessor: (row: LowStockItem) => row.name },
                       { 
                         header: 'Current Stock', 
-                        accessor: (row) => (
+                        accessor: (row: LowStockItem) => (
                           <span className="text-destructive font-bold">{row.stock}</span>
                         )
                       },
-                      { header: 'Min. Stock', accessor: 'minimumStock' },
+                      { header: 'Min. Stock', accessor: (row: LowStockItem) => row.minimumStock },
                       {
                         header: 'Status',
                         accessor: () => <Badge variant="destructive">Low Stock</Badge>

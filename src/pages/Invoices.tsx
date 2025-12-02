@@ -3,8 +3,8 @@ import { DataTable } from '@/components/DataTable';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Search, Calendar, Loader2 } from 'lucide-react';
-import { salesService } from '@/services/salesService';
+import { Search, Calendar } from 'lucide-react';
+import { salesService, Invoice } from '@/services/salesService';
 import { useTranslation } from 'react-i18next';
 import { PageTransition } from '@/components/PageTransition';
 import { TableSkeleton } from '@/components/LoadingSkeleton';
@@ -51,18 +51,18 @@ export default function Invoices() {
           <DataTable
             data={invoices}
             columns={[
-              { header: 'Invoice #', accessor: 'invoiceNumber' },
+              { header: 'Invoice #', accessor: (row: Invoice) => row.invoiceNumber },
               { 
                 header: 'Date', 
-                accessor: (row) => new Date(row.date).toLocaleDateString()
+                accessor: (row: Invoice) => new Date(row.date).toLocaleDateString()
               },
               { 
                 header: 'Total Amount', 
-                accessor: (row) => `$${row.totalAmount.toFixed(2)}`
+                accessor: (row: Invoice) => `$${row.totalAmount.toFixed(2)}`
               },
               { 
                 header: 'Status', 
-                accessor: (row) => (
+                accessor: (row: Invoice) => (
                   <Badge variant={row.status === 'completed' ? 'default' : 'secondary'}>
                     {row.status}
                   </Badge>
